@@ -80,19 +80,7 @@ function handleLogout() {
 
     <div style="flex: 1;"></div>
 
-    <!-- Post CTA (Buyer Only) -->
-    <div class="sidebar-cta" v-if="!isSeller">
-      <div class="cta-card">
-        <div class="cta-icon"><i class="bi bi-lightbulb-fill"></i></div>
-        <div>
-          <div class="cta-title">Ready to Sell?</div>
-          <div class="cta-sub">Turn your unused items into cash today.</div>
-        </div>
-        <button class="btn btn-primary btn-sm" style="margin-top: 8px; width: 100%;" @click="$router.push('/seller/products')" id="sidebar-post-listing-btn">
-          <i class="bi bi-plus-circle me-1"></i> Post a Listing
-        </button>
-      </div>
-    </div>
+
 
     <!-- Logout -->
     <div class="sidebar-footer">

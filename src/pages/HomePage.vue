@@ -119,19 +119,7 @@ const isSeller = computed(() => appState.currentUser?.role === 'seller')
         </div>
       </section>
 
-      <!-- Seller CTA -->
-      <section class="seller-cta-banner" v-if="!isSeller">
-        <div class="seller-cta-content">
-          <div class="seller-cta-icon"><i class="bi bi-bag-plus-fill"></i></div>
-          <div>
-            <h3>Got things to sell?</h3>
-            <p>Join 2,500+ KU students already trading on campus.</p>
-          </div>
-        </div>
-        <button class="btn btn-white" @click="$router.push('/seller/products')" id="start-selling-btn">
-          <i class="bi bi-plus-circle"></i> Start Selling
-        </button>
-      </section>
+
 
       <!-- Footer -->
       <footer class="home-footer">
