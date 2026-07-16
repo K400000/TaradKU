@@ -10,14 +10,14 @@ const props = defineProps({
 const router = useRouter()
 
 const CATEGORY_ICONS = {
-  Electronics: '💻',
-  Books: '📚',
-  Fashion: '👕',
-  Accessories: '🎒',
-  Stationery: '✏️',
-  Housing: '🏠',
-  Sports: '⚽',
-  default: '📦',
+  Electronics: 'bi-cpu',
+  Books: 'bi-book',
+  Fashion: 'bi-bag',
+  Accessories: 'bi-backpack',
+  Stationery: 'bi-pencil',
+  Housing: 'bi-house',
+  Sports: 'bi-trophy',
+  default: 'bi-box-seam',
 }
 
 function getIcon(category) {
@@ -47,16 +47,21 @@ function handleAddToCart(e) {
 
 <template>
   <RouterLink :to="`/products/${product.id}`" class="product-card" :class="{ compact }">
-    <!-- Image/Icon -->
+    <!-- Image Mockup -->
     <div class="card-img">
-      <div class="product-icon-wrap">
-        {{ getIcon(product.category) }}
+      <div class="product-mockup card-mockup">
+        <i :class="['bi', getIcon(product.category)]"></i>
+        <span class="mockup-label">{{ product.category }}</span>
       </div>
       <div class="card-badges">
-        <span v-if="product.verified" class="badge badge-green card-badge">✓ Verified</span>
+        <span v-if="product.verified" class="badge badge-green card-badge">
+          <i class="bi bi-patch-check-fill"></i> Verified
+        </span>
         <span v-if="product.condition === 'Like New'" class="badge badge-blue card-badge">Like New</span>
       </div>
-      <button class="wishlist-btn" @click.prevent.stop>♡</button>
+      <button class="wishlist-btn" @click.prevent.stop>
+        <i class="bi bi-heart"></i>
+      </button>
     </div>
 
     <!-- Content -->
@@ -73,13 +78,13 @@ function handleAddToCart(e) {
         <div class="card-seller">
           <div class="avatar avatar-sm" style="background: #15803d;">{{ product.sellerAvatar }}</div>
           <span>{{ product.sellerName }}</span>
-          <span v-if="product.sellerVerified" class="seller-check">✓</span>
+          <i v-if="product.sellerVerified" class="bi bi-patch-check-fill seller-check"></i>
         </div>
         <span class="card-time">{{ timeAgo(product.postedAt) }}</span>
       </div>
 
       <button v-if="!compact" class="btn btn-primary btn-sm add-cart-btn" @click="handleAddToCart">
-        🛒 Add to Cart
+        <i class="bi bi-cart-plus"></i> Add to Cart
       </button>
     </div>
   </RouterLink>
@@ -105,16 +110,16 @@ function handleAddToCart(e) {
 
 .card-img {
   position: relative;
-  background: var(--bg-page);
+  background: #ffffff;
   aspect-ratio: 1;
   overflow: hidden;
 }
-.card-img .product-icon-wrap {
+.card-mockup {
   width: 100%; height: 100%;
   aspect-ratio: unset;
-  font-size: 3.5rem;
   border-radius: 0;
 }
+.card-mockup i { font-size: 3rem; }
 .card-badges {
   position: absolute;
   top: 8px; left: 8px;
@@ -126,14 +131,15 @@ function handleAddToCart(e) {
   top: 8px; right: 8px;
   width: 30px; height: 30px;
   border-radius: 50%;
-  background: rgba(255,255,255,.9);
-  border: none;
-  font-size: 16px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid var(--border);
+  font-size: 15px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.15s;
+  color: var(--text-muted);
 }
-.wishlist-btn:hover { background: #fff; color: #dc2626; transform: scale(1.1); }
+.wishlist-btn:hover { color: #dc2626; transform: scale(1.1); }
 
 .card-body {
   padding: 12px;
@@ -165,7 +171,5 @@ function handleAddToCart(e) {
 .card-time { font-size: 11px; color: var(--text-muted); }
 
 .add-cart-btn { margin-top: 8px; width: 100%; }
-
-.compact .card-img { aspect-ratio: 4/3; }
-.compact .product-icon-wrap { font-size: 2.5rem; }
+.add-cart-btn i { font-size: 13px; }
 </style>

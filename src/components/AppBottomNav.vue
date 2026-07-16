@@ -9,19 +9,19 @@ const isSeller = computed(() => appState.currentUser?.role === 'seller')
 const tabs = computed(() => {
   if (isSeller.value) {
     return [
-      { path: '/home', icon: '🏠', label: 'Home' },
-      { path: '/seller/dashboard', icon: '📊', label: 'Sell' },
-      { path: '/seller/orders', icon: '🛍️', label: 'Orders' },
-      { path: '/messages', icon: '💬', label: 'Chat', badge: unreadCount.value },
-      { path: '/profile', icon: '👤', label: 'Profile' },
+      { path: '/home', icon: 'bi-house', label: 'Home' },
+      { path: '/seller/dashboard', icon: 'bi-speedometer2', label: 'Sell' },
+      { path: '/seller/orders', icon: 'bi-bag-check', label: 'Orders' },
+      { path: '/messages', icon: 'bi-chat-dots', label: 'Chat', badge: unreadCount.value },
+      { path: '/profile', icon: 'bi-person-circle', label: 'Profile' },
     ]
   }
   return [
-    { path: '/home', icon: '🏠', label: 'Home' },
-    { path: '/products', icon: '🔍', label: 'Browse' },
-    { path: '/cart', icon: '🛒', label: 'Cart', badge: cartCount.value },
-    { path: '/messages', icon: '💬', label: 'Chat', badge: unreadCount.value },
-    { path: '/profile', icon: '👤', label: 'Profile' },
+    { path: '/home', icon: 'bi-house', label: 'Home' },
+    { path: '/products', icon: 'bi-search', label: 'Browse' },
+    { path: '/cart', icon: 'bi-cart3', label: 'Cart', badge: cartCount.value },
+    { path: '/messages', icon: 'bi-chat-dots', label: 'Chat', badge: unreadCount.value },
+    { path: '/profile', icon: 'bi-person-circle', label: 'Profile' },
   ]
 })
 </script>
@@ -36,7 +36,7 @@ const tabs = computed(() => {
       :class="{ 'tab-active': route.path === tab.path || (tab.path !== '/home' && route.path.startsWith(tab.path)) }"
     >
       <div class="tab-icon-wrap">
-        <span class="tab-icon">{{ tab.icon }}</span>
+        <i :class="['bi', tab.icon, 'tab-icon']"></i>
         <span v-if="tab.badge && tab.badge > 0" class="tab-badge">{{ tab.badge }}</span>
       </div>
       <span class="tab-label">{{ tab.label }}</span>

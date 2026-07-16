@@ -58,7 +58,9 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
       <aside class="conv-list">
         <div class="conv-list-header">
           <span class="conv-list-title">Inbox</span>
-          <button class="btn btn-ghost btn-sm" id="compose-btn">✏️</button>
+          <button class="btn btn-ghost btn-sm" id="compose-btn">
+            <i class="bi bi-pencil-square"></i>
+          </button>
         </div>
 
         <div class="conv-items">
@@ -87,7 +89,7 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
           </div>
 
           <div class="empty-state" v-if="myConversations.length === 0" style="padding: 40px 16px;">
-            <div class="empty-icon">💬</div>
+            <i class="bi bi-chat-dots empty-icon"></i>
             <div class="empty-title">ไม่มีการสนทนา</div>
           </div>
         </div>
@@ -102,18 +104,20 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
           </div>
           <div class="chat-header-info">
             <div class="chat-name">{{ otherUser?.name }}</div>
-            <div class="chat-sub verified-badge" v-if="otherUser?.verified">✓ Verified Student • Online</div>
+            <div class="chat-sub verified-badge" v-if="otherUser?.verified">
+              <i class="bi bi-patch-check-fill"></i> Verified Student • Online
+            </div>
           </div>
           <div class="chat-header-actions">
-            <button class="btn btn-ghost btn-sm" id="call-btn">📞</button>
-            <button class="btn btn-ghost btn-sm" id="info-btn">ℹ️</button>
+            <button class="btn btn-ghost btn-sm" id="call-btn"><i class="bi bi-telephone"></i></button>
+            <button class="btn btn-ghost btn-sm" id="info-btn"><i class="bi bi-info-circle"></i></button>
           </div>
         </div>
 
         <!-- Messages -->
         <div class="chat-body" ref="chatBodyRef">
           <div class="chat-product-ref" v-if="activeConv.productTitle">
-            <span>🏷️</span>
+            <i class="bi bi-tag-fill text-green"></i>
             <span>Regarding: <strong>{{ activeConv.productTitle }}</strong></span>
           </div>
 
@@ -137,8 +141,8 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
 
         <!-- Input -->
         <div class="chat-input-bar">
-          <button class="chat-icon-btn" id="attachment-btn">📎</button>
-          <button class="chat-icon-btn" id="emoji-btn">😊</button>
+          <button class="chat-icon-btn" id="attachment-btn"><i class="bi bi-paperclip"></i></button>
+          <button class="chat-icon-btn" id="emoji-btn"><i class="bi bi-emoji-smile"></i></button>
           <input
             v-model="newMessage"
             class="chat-input"
@@ -148,14 +152,14 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
             id="message-input"
           />
           <button class="send-btn" @click="handleSend" :disabled="!newMessage.trim()" id="send-btn">
-            ➤
+            <i class="bi bi-send-fill"></i>
           </button>
         </div>
       </main>
 
       <!-- No conv selected -->
       <main class="chat-empty" v-else>
-        <div class="empty-icon">💬</div>
+        <i class="bi bi-chat-dots empty-icon"></i>
         <div class="empty-title">เลือกการสนทนา</div>
         <div class="empty-desc">คลิกที่ผู้ติดต่อทางซ้ายเพื่อเริ่มแชท</div>
       </main>
@@ -216,7 +220,7 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
 }
 .chat-header-info { flex: 1; }
 .chat-name { font-size: 14px; font-weight: 700; }
-.chat-sub { font-size: 11px; margin-top: 2px; }
+.chat-sub { font-size: 11px; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 .chat-header-actions { display: flex; gap: 4px; }
 
 .chat-body {
@@ -264,8 +268,8 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
   background: var(--bg-card);
   flex-shrink: 0;
 }
-.chat-icon-btn { font-size: 18px; background: none; border: none; cursor: pointer; padding: 4px; border-radius: 8px; transition: background 0.15s; }
-.chat-icon-btn:hover { background: var(--bg-page); }
+.chat-icon-btn { font-size: 18px; color: var(--text-secondary); background: none; border: none; cursor: pointer; padding: 4px; border-radius: 8px; transition: background 0.15s; }
+.chat-icon-btn:hover { background: var(--bg-page); color: var(--text-primary); }
 .chat-input {
   flex: 1;
   padding: 10px 16px;

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 /* ─── CSS Custom Properties ─────────────────────────────────────────────────── */
 :root {
@@ -215,17 +216,35 @@ ul, ol { list-style: none; }
 .avatar-lg { width: 48px; height: 48px; font-size: 16px; }
 .avatar-xl { width: 72px; height: 72px; font-size: 24px; }
 
-/* ─── Product Icon Placeholders ──────────────────────────────────────────────── */
-.product-icon-wrap {
-  width: 100%; aspect-ratio: 1;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--bg-page);
-  font-size: 3rem;
+/* ─── Product Image Mockup ────────────────────────────────────────────────────── */
+.product-mockup {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #ffffff;
   border-radius: var(--radius-md);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border-light);
 }
-
-.product-icon-sm { height: 80px; font-size: 2rem; }
+.product-mockup i {
+  font-size: 2.8rem;
+  color: #d1d5db;
+}
+.product-mockup .mockup-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #d1d5db;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.product-mockup-sm {
+  height: 80px;
+}
+.product-mockup-sm i { font-size: 1.8rem; }
 
 /* ─── Page Header ────────────────────────────────────────────────────────────── */
 .page-header {

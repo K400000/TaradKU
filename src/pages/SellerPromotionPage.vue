@@ -31,11 +31,12 @@ function togglePromo(promo) { promo.active = !promo.active }
     <div class="promo-page">
       <div class="promo-header">
         <div>
-          <h1 class="page-title">🎁 โปรโมชั่น & ส่วนลด</h1>
+          <h1 class="page-title"><i class="bi bi-gift text-green"></i> โปรโมชั่น & ส่วนลด</h1>
           <p class="page-subtitle">สร้างโค้ดส่วนลดและ Flash Sale สำหรับร้านของคุณ</p>
         </div>
         <button class="btn btn-primary" @click="showForm = !showForm" id="create-promo-btn">
-          {{ showForm ? '✕ ยกเลิก' : '+ สร้างโปรโมชั่น' }}
+          <i :class="showForm ? 'bi bi-x-lg' : 'bi bi-plus-circle'"></i>
+          {{ showForm ? 'ยกเลิก' : 'สร้างโปรโมชั่น' }}
         </button>
       </div>
 
@@ -81,10 +82,12 @@ function togglePromo(promo) { promo.active = !promo.active }
 
       <!-- Promo List -->
       <div class="empty-state" v-if="myPromos.length === 0">
-        <div class="empty-icon">🎁</div>
+        <i class="bi bi-gift empty-icon"></i>
         <div class="empty-title">ยังไม่มีโปรโมชั่น</div>
         <div class="empty-desc">สร้างโค้ดส่วนลดเพื่อดึงดูดลูกค้า</div>
-        <button class="btn btn-primary" @click="showForm = true" id="create-first-promo-btn">สร้างโปรโมชั่นแรก</button>
+        <button class="btn btn-primary" @click="showForm = true" id="create-first-promo-btn">
+          <i class="bi bi-plus-circle"></i> สร้างโปรโมชั่นแรก
+        </button>
       </div>
 
       <div class="promos-grid" v-else>
@@ -98,14 +101,14 @@ function togglePromo(promo) { promo.active = !promo.active }
             </label>
           </div>
           <div class="promo-val">
-            <span v-if="promo.type === 'discount'">ลด ฿{{ promo.value.toLocaleString('th-TH') }}</span>
-            <span v-else>🚚 ส่งฟรี</span>
+            <span v-if="promo.type === 'discount'"><i class="bi bi-tag-fill text-green"></i> ลด ฿{{ promo.value.toLocaleString('th-TH') }}</span>
+            <span v-else><i class="bi bi-truck text-green"></i> ส่งฟรี</span>
           </div>
           <div class="promo-desc">{{ promo.description }}</div>
           <div class="promo-meta">
-            <span>ขั้นต่ำ ฿{{ promo.minOrder }}</span>
-            <span>ใช้แล้ว {{ promo.usedCount }} ครั้ง</span>
-            <span>หมดอายุ {{ promo.expiresAt }}</span>
+            <span><i class="bi bi-currency-dollar"></i> ขั้นต่ำ ฿{{ promo.minOrder }}</span>
+            <span><i class="bi bi-person-check"></i> ใช้แล้ว {{ promo.usedCount }} ครั้ง</span>
+            <span><i class="bi bi-calendar-event"></i> หมดอายุ {{ promo.expiresAt }}</span>
           </div>
         </div>
       </div>
@@ -126,9 +129,10 @@ function togglePromo(promo) { promo.active = !promo.active }
 .promo-code-badge { font-size: 18px; font-weight: 800; letter-spacing: 2px; padding: 6px 14px; border-radius: 8px; font-family: monospace; }
 .promo-code-badge.active { background: var(--green-100); color: var(--green-800); }
 .promo-code-badge.inactive { background: var(--border-light); color: var(--text-muted); }
-.promo-val { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.promo-val { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
 .promo-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
 .promo-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+.promo-meta span { display: flex; align-items: center; gap: 4px; }
 
 .toggle-label { cursor: pointer; }
 .toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--border); position: relative; cursor: pointer; transition: background 0.2s; }

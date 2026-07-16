@@ -6,14 +6,14 @@ import AppTopBar from '../components/AppTopBar.vue'
 const router = useRouter()
 
 const categories = [
-  { id: 'Electronics', icon: '💻', label: 'Electronics', count: 142, color: '#dbeafe' },
-  { id: 'Books', icon: '📚', label: 'Books', count: 89, color: '#fef3c7' },
-  { id: 'Fashion', icon: '👕', label: 'Fashion', count: 67, color: '#fce7f3' },
-  { id: 'Stationery', icon: '✏️', label: 'Stationery', count: 54, color: '#f0fdf4' },
-  { id: 'Accessories', icon: '🎒', label: 'Accessories', count: 38, color: '#ede9fe' },
-  { id: 'Housing', icon: '🏠', label: 'Housing', count: 29, color: '#fff7ed' },
-  { id: 'Sports', icon: '⚽', label: 'Sports', count: 21, color: '#f0fdf4' },
-  { id: 'Food', icon: '🍜', label: 'Food & Drink', count: 15, color: '#fef9c3' },
+  { id: 'Electronics', icon: 'bi-cpu', label: 'Electronics', count: 142, color: '#dbeafe' },
+  { id: 'Books', icon: 'bi-book', label: 'Books', count: 89, color: '#fef3c7' },
+  { id: 'Fashion', icon: 'bi-bag', label: 'Fashion', count: 67, color: '#fce7f3' },
+  { id: 'Stationery', icon: 'bi-pencil', label: 'Stationery', count: 54, color: '#f0fdf4' },
+  { id: 'Accessories', icon: 'bi-backpack', label: 'Accessories', count: 38, color: '#ede9fe' },
+  { id: 'Housing', icon: 'bi-house', label: 'Housing', count: 29, color: '#fff7ed' },
+  { id: 'Sports', icon: 'bi-trophy', label: 'Sports', count: 21, color: '#f0fdf4' },
+  { id: 'Food', icon: 'bi-cup-straw', label: 'Food & Drink', count: 15, color: '#fef9c3' },
 ]
 
 function goToCategory(id) {
@@ -40,7 +40,7 @@ function goToCategory(id) {
           @click="goToCategory(cat.id)"
           :id="`category-card-${cat.id}`"
         >
-          <div class="cat-card-icon">{{ cat.icon }}</div>
+          <div class="cat-card-icon"><i :class="['bi', cat.icon]"></i></div>
           <div class="cat-card-label">{{ cat.label }}</div>
           <div class="cat-card-count">{{ cat.count }} items</div>
         </button>
@@ -70,7 +70,7 @@ function goToCategory(id) {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .cat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.cat-card-icon { font-size: 40px; }
+.cat-card-icon { font-size: 32px; color: var(--text-primary); }
 .cat-card-label { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .cat-card-count { font-size: 12px; color: var(--text-secondary); }
 

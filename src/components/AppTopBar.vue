@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { appState, cartCount, unreadCount } from '../stores/app.js'
+import { appState, cartCount } from '../stores/app.js'
 import { defineProps } from 'vue'
 
 const props = defineProps({
@@ -13,7 +13,7 @@ const route = useRoute()
 <template>
   <header class="topbar">
     <div class="search-wrap" v-if="showSearch">
-      <span class="search-icon">🔍</span>
+      <i class="bi bi-search search-icon"></i>
       <input
         v-model="appState.searchQuery"
         class="search-input"
@@ -24,11 +24,11 @@ const route = useRoute()
     </div>
     <h1 v-else class="topbar-title">{{ title }}</h1>
     <div class="topbar-actions">
-      <RouterLink to="/cart" class="topbar-icon-btn" v-if="appState.currentUser?.role !== 'seller'">
-        <span>🛒</span>
+      <RouterLink to="/cart" class="topbar-icon-btn" v-if="appState.currentUser?.role !== 'seller'" id="topbar-cart-btn">
+        <i class="bi bi-cart3"></i>
         <span v-if="cartCount > 0" class="topbar-badge">{{ cartCount }}</span>
       </RouterLink>
-      <RouterLink to="/profile" class="topbar-icon-btn">
+      <RouterLink to="/profile" class="topbar-icon-btn profile-btn" id="topbar-profile-btn">
         <div class="avatar avatar-sm" :style="{ background: appState.currentUser?.avatarColor || '#15803d' }">
           {{ appState.currentUser?.avatar || 'U' }}
         </div>
@@ -64,8 +64,10 @@ const route = useRoute()
   text-decoration: none;
   position: relative;
   transition: background 0.15s;
+  color: var(--text-secondary);
 }
-.topbar-icon-btn:hover { background: var(--border-light); }
+.topbar-icon-btn:hover { background: var(--border-light); color: var(--text-primary); }
+.profile-btn { padding: 0; overflow: hidden; border: none; }
 .topbar-badge {
   position: absolute;
   top: -4px; right: -4px;

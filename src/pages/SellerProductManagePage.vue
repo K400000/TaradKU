@@ -9,12 +9,12 @@ const categories = ['Electronics', 'Books', 'Fashion', 'Stationery', 'Accessorie
 const conditions = ['Like New', 'Good', 'Fair']
 const activeTab = ref('All')
 
+const CATEGORY_ICONS = { Electronics: 'bi-cpu', Books: 'bi-book', Fashion: 'bi-bag', Accessories: 'bi-backpack', Stationery: 'bi-pencil', Housing: 'bi-house', Sports: 'bi-trophy', default: 'bi-box-seam' }
+
 const filteredProducts = computed(() => {
   if (activeTab.value === 'All') return myProducts.value
   return myProducts.value.filter(p => p.condition === activeTab.value)
 })
-
-const CATEGORY_ICONS = { Electronics: '💻', Books: '📚', Fashion: '👕', Accessories: '🎒', Stationery: '✏️', Housing: '🏠', Sports: '⚽', default: '📦' }
 
 function handleSubmit() {
   if (!form.value.title || !form.value.price) return
@@ -40,18 +40,18 @@ function handleSubmit() {
     <AppTopBar :show-search="false" />
     <div class="manage-page">
 
-      <!-- Add Form / Header -->
+      <!-- Listing Table View -->
       <div class="manage-layout" v-if="!showForm">
-        <!-- Header -->
         <div class="manage-header">
           <div>
             <h1 class="page-title">ลงขายสินค้า</h1>
-            <p class="page-subtitle">Create a new listing for your fellow KU students to see.</p>
+            <p class="page-subtitle">Manage your listings on TaradKU.</p>
           </div>
-          <button class="btn btn-primary" @click="showForm = true" id="new-listing-btn">+ New Listing</button>
+          <button class="btn btn-primary" @click="showForm = true" id="new-listing-btn">
+            <i class="bi bi-plus-circle"></i> New Listing
+          </button>
         </div>
 
-        <!-- Tabs -->
         <div class="manage-tabs">
           <button v-for="tab in ['All', 'Like New', 'Good', 'Fair']" :key="tab"
             class="manage-tab" :class="{ active: activeTab === tab }"
@@ -60,29 +60,37 @@ function handleSubmit() {
           </button>
         </div>
 
-        <!-- Products Table -->
         <div class="empty-state" v-if="filteredProducts.length === 0">
-          <div class="empty-icon">📦</div>
+          <i class="bi bi-box-seam empty-icon"></i>
           <div class="empty-title">ยังไม่มีสินค้า</div>
-          <button class="btn btn-primary" @click="showForm = true" id="post-first-btn">+ Post your first listing</button>
+          <button class="btn btn-primary" @click="showForm = true" id="post-first-btn">
+            <i class="bi bi-plus-circle"></i> Post your first listing
+          </button>
         </div>
 
         <div class="products-list" v-else>
           <div class="product-row card" v-for="p in filteredProducts" :key="p.id">
-            <div class="product-row-icon">{{ CATEGORY_ICONS[p.category] || '📦' }}</div>
+            <!-- Mockup Image -->
+            <div class="product-row-img">
+              <i :class="['bi', CATEGORY_ICONS[p.category] || 'bi-box-seam']"></i>
+            </div>
             <div class="product-row-info">
               <div class="product-row-title">{{ p.title }}</div>
               <div class="product-row-meta">
                 <span class="badge badge-gray">{{ p.condition }}</span>
                 <span class="badge badge-green">{{ p.category }}</span>
-                <span class="meta-stat">👁 {{ p.views }}</span>
-                <span class="meta-stat">♡ {{ p.favorites }}</span>
+                <span class="meta-stat"><i class="bi bi-eye"></i> {{ p.views }}</span>
+                <span class="meta-stat"><i class="bi bi-heart"></i> {{ p.favorites }}</span>
               </div>
             </div>
             <div class="product-row-price">฿{{ p.price.toLocaleString('th-TH') }}</div>
             <div class="product-row-actions">
-              <button class="btn btn-outline btn-sm" :id="`edit-${p.id}`">Edit</button>
-              <button class="btn btn-danger btn-sm" @click="deleteProduct(p.id)" :id="`delete-${p.id}`">Delete</button>
+              <button class="btn btn-outline btn-sm" :id="`edit-${p.id}`">
+                <i class="bi bi-pencil"></i> Edit
+              </button>
+              <button class="btn btn-danger btn-sm" @click="deleteProduct(p.id)" :id="`delete-${p.id}`">
+                <i class="bi bi-trash3"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -91,29 +99,32 @@ function handleSubmit() {
       <!-- Add Product Form -->
       <div class="add-form-layout" v-else>
         <div class="form-back">
-          <button class="btn btn-ghost btn-sm" @click="showForm = false" id="back-to-listings">← Back to Listings</button>
+          <button class="btn btn-ghost btn-sm" @click="showForm = false" id="back-to-listings">
+            <i class="bi bi-arrow-left"></i> Back to Listings
+          </button>
           <h1 class="page-title">ลงขายสินค้า</h1>
-          <p class="page-subtitle">Create a new listing for your fellow KU students to see.</p>
+          <p class="page-subtitle">Create a new listing for your fellow KU students.</p>
         </div>
 
         <div class="add-form-grid">
           <!-- Photo Upload -->
           <div class="photo-section card card-pad">
-            <h3 class="form-label" style="margin-bottom: 12px;">Upload Photos</h3>
+            <h3 class="form-label" style="margin-bottom: 12px; font-size: 14px; font-weight: 700;">Upload Photos</h3>
             <div class="photo-main-drop">
-              <div class="photo-icon">📷</div>
+              <i class="bi bi-camera photo-drop-icon"></i>
               <div class="photo-main-label">Main Product Photo</div>
+              <div class="photo-sub">Click to upload or drag & drop</div>
               <div class="photo-sub">Recommended: 1000x1000px</div>
             </div>
             <div class="photo-thumbs">
-              <div class="photo-thumb">+</div>
-              <div class="photo-thumb">+</div>
-              <div class="photo-thumb">+</div>
-              <div class="photo-thumb">+</div>
+              <div class="photo-thumb"><i class="bi bi-plus-lg"></i></div>
+              <div class="photo-thumb"><i class="bi bi-plus-lg"></i></div>
+              <div class="photo-thumb"><i class="bi bi-plus-lg"></i></div>
+              <div class="photo-thumb"><i class="bi bi-plus-lg"></i></div>
             </div>
 
             <div class="safety-tip">
-              <span>🟢</span>
+              <i class="bi bi-shield-check tip-check"></i>
               <div>
                 <div class="tip-title">Campus Safety Tip</div>
                 <div class="tip-desc">Always meet in designated safe zones like Bar Mei, the Central Library, or well-lit areas near student dorms for transactions.</div>
@@ -130,7 +141,10 @@ function handleSubmit() {
             <div class="form-row-2">
               <div class="form-group">
                 <label class="form-label" for="item-price">Price (฿)</label>
-                <input id="item-price" v-model="form.price" class="form-input" type="number" placeholder="฿ 0.00" />
+                <div class="input-icon-wrap">
+                  <i class="bi bi-currency-dollar input-icon"></i>
+                  <input id="item-price" v-model="form.price" class="form-input input-with-icon" type="number" placeholder="0.00" />
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="item-cat">Category</label>
@@ -141,7 +155,7 @@ function handleSubmit() {
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="item-condition">Condition</label>
+              <label class="form-label">Condition</label>
               <div class="condition-tabs">
                 <button v-for="c in conditions" :key="c" type="button"
                   class="cond-tab" :class="{ active: form.condition === c }"
@@ -154,14 +168,16 @@ function handleSubmit() {
             </div>
             <div class="form-group visibility-row">
               <div>
-                <label class="form-label">Visibility</label>
+                <label class="form-label">
+                  <i class="bi bi-lock-fill text-green"></i> Visibility
+                </label>
                 <p class="visibility-sub">Only KU-verified students can view</p>
               </div>
-              <div class="toggle-wrap">
-                <div class="toggle active"></div>
-              </div>
+              <div class="toggle active"></div>
             </div>
-            <button class="btn btn-primary btn-lg" @click="handleSubmit" id="post-for-sale-btn">Post for Sale ▶</button>
+            <button class="btn btn-primary btn-lg" @click="handleSubmit" id="post-for-sale-btn">
+              <i class="bi bi-upload"></i> Post for Sale
+            </button>
           </div>
         </div>
       </div>
@@ -179,38 +195,41 @@ function handleSubmit() {
 
 .products-list { display: flex; flex-direction: column; gap: 10px; }
 .product-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
-.product-row-icon { font-size: 2rem; width: 48px; height: 48px; background: var(--bg-page); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.product-row-img { width: 52px; height: 52px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #d1d5db; flex-shrink: 0; }
 .product-row-info { flex: 1; min-width: 0; }
 .product-row-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
 .product-row-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.meta-stat { font-size: 11px; color: var(--text-muted); }
+.meta-stat { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 3px; }
 .product-row-price { font-size: 16px; font-weight: 700; white-space: nowrap; }
 .product-row-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
 /* Add Form */
 .form-back { margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
-.add-form-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; }
-.photo-main-drop { border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 40px 20px; text-align: center; background: var(--bg-page); cursor: pointer; transition: border-color 0.15s; margin-bottom: 12px; }
-.photo-main-drop:hover { border-color: var(--green-400); }
-.photo-icon { font-size: 36px; margin-bottom: 8px; }
+.add-form-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
+.photo-main-drop { border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 36px 20px; text-align: center; background: #fafafa; cursor: pointer; transition: border-color 0.15s; margin-bottom: 12px; }
+.photo-main-drop:hover { border-color: var(--green-400); background: var(--green-50); }
+.photo-drop-icon { font-size: 36px; color: #d1d5db; display: block; margin-bottom: 8px; }
 .photo-main-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-.photo-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.photo-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 .photo-thumbs { display: flex; gap: 8px; margin-bottom: 16px; }
-.photo-thumb { flex: 1; aspect-ratio: 1; border: 2px dashed var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-.photo-thumb:hover { border-color: var(--green-400); color: var(--green-600); }
-.safety-tip { display: flex; gap: 10px; background: var(--green-50); border: 1px solid var(--green-200); border-radius: var(--radius-md); padding: 12px; font-size: 12px; }
+.photo-thumb { flex: 1; aspect-ratio: 1; border: 2px dashed var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; background: #fafafa; }
+.photo-thumb:hover { border-color: var(--green-400); color: var(--green-600); background: var(--green-50); }
+.safety-tip { display: flex; gap: 10px; background: var(--green-50); border: 1px solid var(--green-200); border-radius: var(--radius-md); padding: 12px; font-size: 12px; align-items: flex-start; }
+.tip-check { color: var(--green-600); font-size: 16px; flex-shrink: 0; }
 .tip-title { font-weight: 700; color: var(--green-700); margin-bottom: 4px; }
 .tip-desc { color: var(--text-secondary); line-height: 1.5; }
 
 .form-fields { display: flex; flex-direction: column; gap: 16px; }
 .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.input-icon-wrap { position: relative; }
+.input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
+.input-with-icon { padding-left: 36px; }
 .condition-tabs { display: flex; gap: 8px; }
 .cond-tab { padding: 7px 16px; border: 2px solid var(--border); border-radius: var(--radius-full); font-size: 13px; font-weight: 600; background: #fff; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
 .cond-tab.active { border-color: var(--green-600); background: var(--green-50); color: var(--green-700); }
-.visibility-row { flex-direction: row; align-items: center; justify-content: space-between; }
+.visibility-row { flex-direction: row !important; align-items: center !important; justify-content: space-between; }
 .visibility-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.toggle-wrap { padding: 4px; }
-.toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--border); position: relative; cursor: pointer; transition: background 0.2s; }
+.toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--border); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
 .toggle.active { background: var(--green-600); }
 .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
 .toggle.active::after { transform: translateX(20px); }

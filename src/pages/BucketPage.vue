@@ -6,8 +6,6 @@ import AppTopBar from '../components/AppTopBar.vue'
 
 const router = useRouter()
 
-const CATEGORY_ICONS = { Electronics: '💻', Books: '📚', Fashion: '👕', Accessories: '🎒', Stationery: '✏️', Housing: '🏠', Sports: '⚽', default: '📦' }
-
 const groupedBySeller = computed(() => {
   const map = {}
   for (const item of appState.cart) {
@@ -22,14 +20,17 @@ function formatPrice(n) { return n.toLocaleString('th-TH') }
 
 <template>
   <div>
-    <AppTopBar title="Your Shopping Cart" :show-search="false" />
+    <AppTopBar title="Shopping Cart" :show-search="false" />
     <div class="cart-page">
+
       <!-- Empty State -->
       <div class="empty-state" v-if="appState.cart.length === 0">
-        <div class="empty-icon">🛒</div>
+        <i class="bi bi-cart-x empty-icon"></i>
         <div class="empty-title">ตะกร้าว่างเปล่า</div>
         <div class="empty-desc">เลือกซื้อสินค้าก่อนนะคะ</div>
-        <RouterLink to="/products" class="btn btn-primary" id="browse-products-btn">Browse Products</RouterLink>
+        <RouterLink to="/products" class="btn btn-primary" id="browse-products-btn">
+          <i class="bi bi-bag"></i> Browse Products
+        </RouterLink>
       </div>
 
       <div class="cart-layout" v-else>
@@ -40,31 +41,42 @@ function formatPrice(n) { return n.toLocaleString('th-TH') }
           <div v-for="group in groupedBySeller" :key="group.sellerName" class="seller-group card">
             <div class="seller-group-header">
               <div class="seller-tag">
-                <span class="seller-icon">🏪</span>
+                <i class="bi bi-shop seller-icon"></i>
                 <span class="seller-name">Seller: {{ group.sellerName }}</span>
-                <span v-if="group.sellerVerified" class="verified-badge">✓ Verified Student</span>
+                <span v-if="group.sellerVerified" class="verified-badge">
+                  <i class="bi bi-patch-check-fill"></i> Verified
+                </span>
               </div>
             </div>
 
             <div class="cart-item" v-for="item in group.items" :key="item.productId">
-              <div class="item-icon">
-                {{ CATEGORY_ICONS.default }}
+              <!-- Mockup thumbnail -->
+              <div class="item-thumb">
+                <i class="bi bi-box-seam"></i>
               </div>
               <div class="item-info">
                 <RouterLink :to="`/products/${item.productId}`" class="item-title">{{ item.title }}</RouterLink>
                 <div class="item-price">฿{{ formatPrice(item.price) }}</div>
               </div>
               <div class="item-qty">
-                <button class="qty-btn" @click="updateCartQty(item.productId, item.quantity - 1)" :id="`qty-dec-${item.productId}`">-</button>
+                <button class="qty-btn" @click="updateCartQty(item.productId, item.quantity - 1)" :id="`qty-dec-${item.productId}`">
+                  <i class="bi bi-dash"></i>
+                </button>
                 <span class="qty-val">{{ item.quantity }}</span>
-                <button class="qty-btn" @click="updateCartQty(item.productId, item.quantity + 1)" :id="`qty-inc-${item.productId}`">+</button>
+                <button class="qty-btn" @click="updateCartQty(item.productId, item.quantity + 1)" :id="`qty-inc-${item.productId}`">
+                  <i class="bi bi-plus"></i>
+                </button>
               </div>
               <div class="item-total">฿{{ formatPrice(item.price * item.quantity) }}</div>
-              <button class="remove-btn" @click="removeFromCart(item.productId)" :id="`remove-${item.productId}`">Remove</button>
+              <button class="remove-btn" @click="removeFromCart(item.productId)" :id="`remove-${item.productId}`">
+                <i class="bi bi-trash3"></i>
+              </button>
             </div>
           </div>
 
-          <RouterLink to="/products" class="continue-link">← Continue Shopping at KU Market</RouterLink>
+          <RouterLink to="/products" class="continue-link">
+            <i class="bi bi-arrow-left"></i> Continue Shopping at TaradKU
+          </RouterLink>
         </div>
 
         <!-- Order Summary -->
@@ -76,7 +88,7 @@ function formatPrice(n) { return n.toLocaleString('th-TH') }
             <span>฿{{ formatPrice(cartTotal) }}</span>
           </div>
           <div class="summary-row">
-            <span>Campus Pickup 🏫</span>
+            <span><i class="bi bi-geo-alt"></i> Campus Pickup</span>
             <span class="text-green">FREE</span>
           </div>
           <div class="summary-row">
@@ -90,11 +102,11 @@ function formatPrice(n) { return n.toLocaleString('th-TH') }
           </div>
 
           <button class="btn btn-primary btn-full btn-lg" @click="$router.push('/checkout')" style="margin-top: 16px;" id="checkout-btn">
-            🛒 Checkout Now →
+            <i class="bi bi-bag-check"></i> Checkout Now
           </button>
 
           <div class="safety-notice">
-            <span class="safety-icon">🛡️</span>
+            <i class="bi bi-shield-check safety-icon"></i>
             <div>
               <div class="safety-title">Campus Safety Notice</div>
               <div class="safety-desc">We recommend meeting in well-lit campus areas like the main library or faculty hubs. Always verify the item condition before completing payment.</div>
@@ -122,34 +134,40 @@ function formatPrice(n) { return n.toLocaleString('th-TH') }
 .seller-group { margin-bottom: 16px; overflow: visible; }
 .seller-group-header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg-page); }
 .seller-tag { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
-.seller-icon { font-size: 16px; }
-.seller-name { color: var(--text-primary); }
+.seller-icon { color: var(--green-600); font-size: 16px; }
 
 .cart-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border-light); }
 .cart-item:last-child { border-bottom: none; }
-.item-icon { width: 56px; height: 56px; background: var(--bg-page); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+.item-thumb {
+  width: 56px; height: 56px;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; color: #d1d5db; flex-shrink: 0;
+}
 .item-info { flex: 1; min-width: 0; }
 .item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); text-decoration: none; display: block; margin-bottom: 4px; }
 .item-title:hover { color: var(--green-600); }
 .item-price { font-size: 14px; font-weight: 700; color: var(--green-700); }
+
 .item-qty { display: flex; align-items: center; gap: 8px; }
-.qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .qty-btn:hover { border-color: var(--green-500); color: var(--green-600); }
 .qty-val { font-size: 14px; font-weight: 700; min-width: 20px; text-align: center; }
 .item-total { font-size: 15px; font-weight: 700; min-width: 80px; text-align: right; }
-.remove-btn { font-size: 12px; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; }
+.remove-btn { font-size: 16px; color: #dc2626; background: none; border: none; cursor: pointer; padding: 4px; border-radius: 6px; transition: all 0.15s; }
+.remove-btn:hover { background: #fee2e2; }
 
-.continue-link { display: block; font-size: 13px; color: var(--green-600); text-decoration: none; margin-top: 12px; }
+.continue-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--green-600); text-decoration: none; margin-top: 12px; }
 .continue-link:hover { text-decoration: underline; }
 
-/* Summary */
 .summary-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
-.summary-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; align-items: center; }
 .summary-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; }
 .total-price { font-size: 22px; color: var(--green-700); }
 
-.safety-notice { display: flex; gap: 10px; background: var(--green-50); border: 1px solid var(--green-200); border-radius: var(--radius-md); padding: 12px; margin-top: 12px; }
-.safety-icon { font-size: 20px; flex-shrink: 0; }
+.safety-notice { display: flex; gap: 10px; background: var(--green-50); border: 1px solid var(--green-200); border-radius: var(--radius-md); padding: 12px; margin-top: 12px; align-items: flex-start; }
+.safety-icon { font-size: 20px; color: var(--green-600); flex-shrink: 0; margin-top: 2px; }
 .safety-title { font-size: 12px; font-weight: 700; color: var(--green-700); margin-bottom: 4px; }
 .safety-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
 

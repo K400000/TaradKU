@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { appState, cartCount, unreadCount, logout } from '../stores/app.js'
+import logoImg from '../assets/logo_branding.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -9,37 +10,26 @@ const route = useRoute()
 const isSeller = computed(() => appState.currentUser?.role === 'seller')
 
 const navItems = computed(() => {
-  const base = [
-    { name: 'Home', path: '/home', icon: '🏠', label: 'หน้าแรก' },
-    { name: 'Messages', path: '/messages', icon: '💬', label: 'ข้อความ', badge: unreadCount.value },
-    { name: 'Profile', path: '/profile', icon: '👤', label: 'โปรไฟล์' },
-  ]
   if (isSeller.value) {
     return [
-      { name: 'Home', path: '/home', icon: '🏠', label: 'หน้าแรก' },
-      { name: 'SellerDashboard', path: '/seller/dashboard', icon: '📊', label: 'Dashboard' },
-      { name: 'SellerProducts', path: '/seller/products', icon: '📦', label: 'สินค้า' },
-      { name: 'SellerOrders', path: '/seller/orders', icon: '🛍️', label: 'ออเดอร์' },
-      { name: 'SellerPromotions', path: '/seller/promotions', icon: '🎁', label: 'โปรโมชั่น' },
-      { name: 'Messages', path: '/messages', icon: '💬', label: 'ข้อความ', badge: unreadCount.value },
-      { name: 'Profile', path: '/profile', icon: '👤', label: 'โปรไฟล์' },
+      { name: 'Home', path: '/home', icon: 'bi-house', label: 'หน้าแรก' },
+      { name: 'SellerDashboard', path: '/seller/dashboard', icon: 'bi-speedometer2', label: 'Dashboard' },
+      { name: 'SellerProducts', path: '/seller/products', icon: 'bi-box-seam', label: 'สินค้า' },
+      { name: 'SellerOrders', path: '/seller/orders', icon: 'bi-bag-check', label: 'ออเดอร์' },
+      { name: 'SellerPromotions', path: '/seller/promotions', icon: 'bi-gift', label: 'โปรโมชั่น' },
+      { name: 'Messages', path: '/messages', icon: 'bi-chat-dots', label: 'ข้อความ', badge: unreadCount.value },
+      { name: 'Profile', path: '/profile', icon: 'bi-person-circle', label: 'โปรไฟล์' },
     ]
   }
   return [
-    { name: 'Home', path: '/home', icon: '🏠', label: 'หน้าแรก' },
-    { name: 'ProductList', path: '/products', icon: '🔍', label: 'ค้นหาสินค้า' },
-    { name: 'Cart', path: '/cart', icon: '🛒', label: 'ตะกร้า', badge: cartCount.value },
-    { name: 'OrderTracking', path: '/orders', icon: '📦', label: 'ออเดอร์' },
-    { name: 'Messages', path: '/messages', icon: '💬', label: 'ข้อความ', badge: unreadCount.value },
-    { name: 'Profile', path: '/profile', icon: '👤', label: 'โปรไฟล์' },
+    { name: 'Home', path: '/home', icon: 'bi-house', label: 'หน้าแรก' },
+    { name: 'ProductList', path: '/products', icon: 'bi-search', label: 'ค้นหาสินค้า' },
+    { name: 'Cart', path: '/cart', icon: 'bi-cart3', label: 'ตะกร้า', badge: cartCount.value },
+    { name: 'OrderTracking', path: '/orders', icon: 'bi-truck', label: 'ออเดอร์' },
+    { name: 'Messages', path: '/messages', icon: 'bi-chat-dots', label: 'ข้อความ', badge: unreadCount.value },
+    { name: 'Profile', path: '/profile', icon: 'bi-person-circle', label: 'โปรไฟล์' },
   ]
 })
-
-function isActive(path) {
-  return route.path.startsWith(path) && path !== '/home'
-    ? true
-    : route.path === path
-}
 
 function handleLogout() {
   logout()
@@ -49,12 +39,12 @@ function handleLogout() {
 
 <template>
   <aside class="app-sidebar">
-    <!-- Logo -->
+    <!-- Logo Brand -->
     <div class="sidebar-brand">
       <div class="brand-logo">
-        <span class="brand-icon">🌿</span>
+        <img :src="logoImg" alt="TaradKU Logo" class="brand-img" />
         <div>
-          <div class="brand-name">KU Market</div>
+          <div class="brand-name">TaradKU</div>
           <div class="brand-sub">{{ isSeller ? 'Seller Mode' : 'Campus Marketplace' }}</div>
         </div>
       </div>
@@ -67,8 +57,8 @@ function handleLogout() {
       </div>
       <div class="user-info">
         <div class="user-name">{{ appState.currentUser.name }}</div>
-        <div class="user-sub verified-badge-sidebar" v-if="appState.currentUser.verified">
-          ✓ Verified Student
+        <div class="verified-badge-sidebar" v-if="appState.currentUser.verified">
+          <i class="bi bi-patch-check-fill"></i> Verified Student
         </div>
       </div>
     </div>
@@ -82,31 +72,32 @@ function handleLogout() {
         class="nav-item"
         :class="{ 'nav-active': route.path === item.path || (item.path !== '/home' && route.path.startsWith(item.path)) }"
       >
-        <span class="nav-icon">{{ item.icon }}</span>
+        <i :class="['nav-icon', 'bi', item.icon]"></i>
         <span class="nav-label">{{ item.label }}</span>
         <span v-if="item.badge && item.badge > 0" class="nav-badge">{{ item.badge }}</span>
       </RouterLink>
     </nav>
 
-    <!-- Bottom Spacer -->
     <div style="flex: 1;"></div>
 
-    <!-- Post an Item CTA (Buyer Only) -->
+    <!-- Post CTA (Buyer Only) -->
     <div class="sidebar-cta" v-if="!isSeller">
-      <RouterLink to="/seller/products" class="cta-card">
-        <div class="cta-icon">💡</div>
+      <div class="cta-card">
+        <div class="cta-icon"><i class="bi bi-lightbulb-fill"></i></div>
         <div>
           <div class="cta-title">Ready to Sell?</div>
           <div class="cta-sub">Turn your unused items into cash today.</div>
         </div>
-        <button class="btn btn-primary btn-sm" style="margin-top: 8px; width: 100%;" @click.prevent="$router.push('/seller/products')">Post a Listing</button>
-      </RouterLink>
+        <button class="btn btn-primary btn-sm" style="margin-top: 8px; width: 100%;" @click="$router.push('/seller/products')" id="sidebar-post-listing-btn">
+          <i class="bi bi-plus-circle me-1"></i> Post a Listing
+        </button>
+      </div>
     </div>
 
     <!-- Logout -->
     <div class="sidebar-footer">
-      <button class="nav-item logout-btn" @click="handleLogout">
-        <span class="nav-icon">🚪</span>
+      <button class="nav-item logout-btn" @click="handleLogout" id="sidebar-logout-btn">
+        <i class="bi bi-box-arrow-right nav-icon"></i>
         <span class="nav-label">Logout</span>
       </button>
     </div>
@@ -115,7 +106,7 @@ function handleLogout() {
 
 <style scoped>
 .sidebar-brand {
-  padding: 20px 16px 12px;
+  padding: 16px 14px 12px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .brand-logo {
@@ -123,15 +114,21 @@ function handleLogout() {
   align-items: center;
   gap: 10px;
 }
-.brand-icon { font-size: 24px; }
+.brand-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
 .brand-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   color: #fff;
   line-height: 1.1;
 }
 .brand-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: #6b7280;
   margin-top: 1px;
 }
@@ -140,7 +137,7 @@ function handleLogout() {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .user-name {
@@ -152,10 +149,14 @@ function handleLogout() {
   font-size: 10px;
   color: #4ade80;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
 }
 
 .sidebar-nav {
-  padding: 10px 10px 0;
+  padding: 10px 8px 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -165,10 +166,10 @@ function handleLogout() {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 9px 10px;
   border-radius: 8px;
   color: var(--text-sidebar);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   transition: all 0.15s ease;
   cursor: pointer;
@@ -177,6 +178,7 @@ function handleLogout() {
   width: 100%;
   text-align: left;
   position: relative;
+  text-decoration: none;
 }
 .nav-item:hover {
   background: rgba(255,255,255,.06);
@@ -187,7 +189,7 @@ function handleLogout() {
   color: #fff !important;
 }
 
-.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
 .nav-label { flex: 1; }
 
 .nav-badge {
@@ -202,7 +204,7 @@ function handleLogout() {
 }
 
 .sidebar-cta {
-  padding: 12px 12px 0;
+  padding: 10px 10px 0;
 }
 .cta-card {
   display: block;
@@ -210,17 +212,18 @@ function handleLogout() {
   border: 1px solid rgba(22,163,74,.3);
   border-radius: 10px;
   padding: 12px;
-  text-decoration: none;
 }
-.cta-icon { font-size: 20px; margin-bottom: 4px; }
+.cta-icon { font-size: 18px; color: #4ade80; margin-bottom: 4px; }
 .cta-title { font-size: 12px; font-weight: 700; color: #fff; }
 .cta-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; line-height: 1.3; }
 
 .sidebar-footer {
-  padding: 10px;
+  padding: 8px 8px;
   border-top: 1px solid rgba(255,255,255,.06);
-  margin-top: 12px;
+  margin-top: 10px;
 }
 .logout-btn { color: #9ca3af; }
 .logout-btn:hover { color: #f87171; background: rgba(239,68,68,.1) !important; }
+
+.me-1 { margin-right: 4px; }
 </style>

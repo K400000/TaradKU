@@ -77,7 +77,7 @@ function clearFilters() {
           <div class="filter-section">
             <label class="filter-label">Search</label>
             <div class="search-wrap" style="max-width: none;">
-              <span class="search-icon">🔍</span>
+              <i class="bi bi-search search-icon"></i>
               <input v-model="search" class="search-input" type="text" placeholder="Search..." id="product-search" />
             </div>
           </div>
@@ -139,7 +139,7 @@ function clearFilters() {
             <ProductCard v-for="p in filteredProducts" :key="p.id" :product="p" />
           </div>
           <div class="empty-state" v-else>
-            <div class="empty-icon">🔍</div>
+            <i class="bi bi-search empty-icon"></i>
             <div class="empty-title">ไม่พบสินค้า</div>
             <div class="empty-desc">ลองปรับ filter หรือค้นหาด้วยคำอื่น</div>
             <button class="btn btn-outline" @click="clearFilters" id="clear-filters-empty">Clear Filters</button>

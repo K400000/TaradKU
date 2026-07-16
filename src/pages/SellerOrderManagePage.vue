@@ -8,13 +8,13 @@ const filteredOrders = computed(() => {
   if (activeTab.value === 'all') return sellerOrders.value
   return sellerOrders.value.filter(o => o.status === activeTab.value)
 })
-const STATUS_ICONS = { pending: '⏳', shipped: '🚚', delivered: '✅' }
+const STATUS_ICONS = { pending: 'bi-hourglass-split', shipped: 'bi-truck', delivered: 'bi-check-circle-fill' }
 const STATUS_LABELS = { pending: 'รอจัดเตรียม', shipped: 'กำลังจัดส่ง', delivered: 'ส่งแล้ว' }
 
 function formatDate(d) { return d ? new Date(d).toLocaleString('th-TH') : '—' }
 
 function handlePrintLabel(order) {
-  alert(`🖨️ Printing shipping label for Order #${order.id}\nBuyer: ${order.buyerId}\nItems: ${order.items.map(i => i.title).join(', ')}\nMeeting: ${order.meetingLocation}`)
+  alert(`Printing shipping label for Order #${order.id}\nBuyer: ${order.buyerId}\nItems: ${order.items.map(i => i.title).join(', ')}\nMeeting: ${order.meetingLocation}`)
 }
 </script>
 
@@ -33,6 +33,7 @@ function handlePrintLabel(order) {
         <button v-for="tab in ['all', 'pending', 'shipped', 'delivered']" :key="tab"
           class="order-tab" :class="{ active: activeTab === tab }"
           @click="activeTab = tab" :id="`seller-tab-${tab}`">
+          <i v-if="tab !== 'all'" :class="['bi', STATUS_ICONS[tab]]"></i>
           {{ tab === 'all' ? 'ทั้งหมด' : STATUS_LABELS[tab] }}
           <span class="tab-count">{{ tab === 'all' ? sellerOrders.length : sellerOrders.filter(o=>o.status===tab).length }}</span>
         </button>
@@ -40,7 +41,7 @@ function handlePrintLabel(order) {
 
       <div class="orders-list">
         <div class="empty-state" v-if="filteredOrders.length === 0">
-          <div class="empty-icon">📭</div>
+          <i class="bi bi-inbox empty-icon"></i>
           <div class="empty-title">ไม่มีออเดอร์ในสถานะนี้</div>
         </div>
 
@@ -51,13 +52,16 @@ function handlePrintLabel(order) {
               <div class="order-time">{{ formatDate(order.createdAt) }}</div>
             </div>
             <span class="badge" :class="`status-${order.status}`">
-              {{ STATUS_ICONS[order.status] }} {{ STATUS_LABELS[order.status] }}
+              <i :class="['bi', STATUS_ICONS[order.status]]"></i>
+              {{ STATUS_LABELS[order.status] }}
             </span>
           </div>
 
           <div class="order-items-list">
             <div class="order-item" v-for="item in order.items" :key="item.productId">
-              <div class="item-thumb">📦</div>
+              <div class="item-thumb">
+                <i class="bi bi-box-seam"></i>
+              </div>
               <div class="item-info">
                 <div class="item-title">{{ item.title }}</div>
                 <div class="item-price">฿{{ item.price.toLocaleString('th-TH') }} × {{ item.quantity }}</div>
@@ -66,15 +70,17 @@ function handlePrintLabel(order) {
           </div>
 
           <div class="order-meta">
-            <div class="meta-item">💳 {{ order.paymentMethod }}</div>
-            <div class="meta-item">📍 {{ order.meetingLocation }}</div>
+            <div class="meta-item"><i class="bi bi-credit-card"></i> {{ order.paymentMethod }}</div>
+            <div class="meta-item"><i class="bi bi-geo-alt"></i> {{ order.meetingLocation }}</div>
             <div class="meta-item meta-total">฿{{ order.totalAmount.toLocaleString('th-TH') }}</div>
           </div>
 
           <div class="order-card-actions">
-            <button class="btn btn-ghost btn-sm" @click="handlePrintLabel(order)" :id="`print-${order.id}`">🖨️ พิมพ์ใบปะหน้า</button>
+            <button class="btn btn-ghost btn-sm" @click="handlePrintLabel(order)" :id="`print-${order.id}`">
+              <i class="bi bi-printer"></i> พิมพ์ใบปะหน้า
+            </button>
             <button v-if="order.status !== 'delivered'" class="btn btn-primary btn-sm" @click="confirmShipping(order.id)" :id="`confirm-${order.id}`">
-              ✓ ยืนยันการส่ง
+              <i class="bi bi-check-lg"></i> ยืนยันการส่ง
             </button>
           </div>
         </div>
@@ -98,12 +104,12 @@ function handlePrintLabel(order) {
 
 .order-items-list { padding: 12px 20px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border-light); }
 .order-item { display: flex; align-items: center; gap: 10px; }
-.item-thumb { width: 40px; height: 40px; background: var(--bg-page); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.item-thumb { width: 44px; height: 44px; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #d1d5db; }
 .item-title { font-size: 13px; font-weight: 600; }
 .item-price { font-size: 12px; color: var(--text-secondary); }
 
 .order-meta { display: flex; gap: 16px; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
-.meta-item { font-size: 12px; color: var(--text-secondary); }
+.meta-item { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .meta-total { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-left: auto; }
 
 .order-card-actions { display: flex; gap: 10px; padding: 12px 20px; }
