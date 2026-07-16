@@ -4,6 +4,7 @@ import { appState, myConversations, sendMessage } from '../stores/app.js'
 import AppTopBar from '../components/AppTopBar.vue'
 
 const activeConvId = ref(myConversations.value[0]?.id || null)
+const showingChat = ref(false)
 const newMessage = ref('')
 const chatBodyRef = ref(null)
 
@@ -18,6 +19,7 @@ const otherUser = computed(() => appState.users.find(u => u.id === otherUserId.v
 
 function selectConv(id) {
   activeConvId.value = id
+  showingChat.value = true
   const conv = appState.conversations.find(c => c.id === id)
   if (conv) conv.unread = 0
   nextTick(scrollToBottom)
@@ -53,7 +55,7 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
 <template>
   <div class="msg-page">
     <AppTopBar title="Messages" :show-search="false" />
-    <div class="msg-layout">
+    <div class="msg-layout" :class="{ 'showing-chat': showingChat }">
       <!-- Conversation List -->
       <aside class="conv-list">
         <div class="conv-list-header">
@@ -99,6 +101,9 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
       <main class="chat-window" v-if="activeConv">
         <!-- Chat Header -->
         <div class="chat-header">
+          <button class="btn btn-ghost btn-sm mobile-back-btn" @click="showingChat = false" title="Back to Inbox">
+            <i class="bi bi-arrow-left"></i>
+          </button>
           <div class="avatar" :style="{ background: otherUser?.avatarColor || '#15803d' }">
             {{ otherUser?.avatar || 'U' }}
           </div>
@@ -296,10 +301,13 @@ watch(activeConvId, () => nextTick(scrollToBottom), { immediate: true })
 .send-btn:hover:not(:disabled) { background: var(--green-700); transform: scale(1.05); }
 .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-@media (max-width: 768px) {
-  .conv-list { width: 100%; display: block; }
+.mobile-back-btn { display: none; }
+
+@media (max-width: 850px) {
+  .conv-list { width: 100%; display: flex; }
   .chat-window { display: none; }
   .msg-layout.showing-chat .conv-list { display: none; }
-  .msg-layout.showing-chat .chat-window { display: flex; }
+  .msg-layout.showing-chat .chat-window { display: flex; width: 100%; }
+  .mobile-back-btn { display: inline-flex; align-items: center; justify-content: center; margin-right: 6px; font-size: 1.25rem; }
 }
 </style>
