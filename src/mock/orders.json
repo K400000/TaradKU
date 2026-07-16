@@ -1,0 +1,69 @@
+[
+  {
+    "id": "o001",
+    "buyerId": "u001",
+    "sellerId": "u002",
+    "items": [
+      { "productId": "p001", "title": "TI-84 Plus CE Graphing Calculator", "price": 2500, "quantity": 1 },
+      { "productId": "p006", "title": "KU Engineering Polo Shirt - Size L", "price": 350, "quantity": 1 }
+    ],
+    "status": "delivered",
+    "paymentMethod": "PromptPay",
+    "discountCode": "",
+    "meetingLocation": "Bar Mei (Cafeteria 1)",
+    "totalAmount": 2850,
+    "shipping": 0,
+    "createdAt": "2026-07-01T10:00:00Z",
+    "updatedAt": "2026-07-05T14:00:00Z",
+    "trackingSteps": [
+      { "status": "confirmed", "label": "Order Confirmed", "timestamp": "2026-07-01T10:30:00Z", "done": true },
+      { "status": "preparing", "label": "Preparing Item", "timestamp": "2026-07-02T08:00:00Z", "done": true },
+      { "status": "shipped", "label": "On the Way", "timestamp": "2026-07-03T12:00:00Z", "done": true },
+      { "status": "delivered", "label": "Delivered", "timestamp": "2026-07-05T14:00:00Z", "done": true }
+    ]
+  },
+  {
+    "id": "o002",
+    "buyerId": "u001",
+    "sellerId": "u004",
+    "items": [
+      { "productId": "p002", "title": "Ergonomic Laptop Backpack", "price": 850, "quantity": 1 }
+    ],
+    "status": "shipped",
+    "paymentMethod": "Bank Transfer",
+    "discountCode": "KU2024",
+    "meetingLocation": "Engineering Building B",
+    "totalAmount": 850,
+    "shipping": 0,
+    "createdAt": "2026-07-10T09:00:00Z",
+    "updatedAt": "2026-07-13T11:00:00Z",
+    "trackingSteps": [
+      { "status": "confirmed", "label": "Order Confirmed", "timestamp": "2026-07-10T09:30:00Z", "done": true },
+      { "status": "preparing", "label": "Preparing Item", "timestamp": "2026-07-11T08:00:00Z", "done": true },
+      { "status": "shipped", "label": "On the Way", "timestamp": "2026-07-13T11:00:00Z", "done": true },
+      { "status": "delivered", "label": "Delivered", "timestamp": null, "done": false }
+    ]
+  },
+  {
+    "id": "o003",
+    "buyerId": "u003",
+    "sellerId": "u002",
+    "items": [
+      { "productId": "p003", "title": "Wireless Headphones Sony WH-1000XM4", "price": 1200, "quantity": 1 }
+    ],
+    "status": "pending",
+    "paymentMethod": "PromptPay",
+    "discountCode": "",
+    "meetingLocation": "Bar Mei (Cafeteria 1)",
+    "totalAmount": 1200,
+    "shipping": 0,
+    "createdAt": "2026-07-15T14:00:00Z",
+    "updatedAt": "2026-07-15T14:00:00Z",
+    "trackingSteps": [
+      { "status": "confirmed", "label": "Order Confirmed", "timestamp": "2026-07-15T14:30:00Z", "done": true },
+      { "status": "preparing", "label": "Preparing Item", "timestamp": null, "done": false },
+      { "status": "shipped", "label": "On the Way", "timestamp": null, "done": false },
+      { "status": "delivered", "label": "Delivered", "timestamp": null, "done": false }
+    ]
+  }
+]

@@ -1,47 +1,35 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { appState } from './stores/app.js'
+import AppSidebar from './components/AppSidebar.vue'
+import AppBottomNav from './components/AppBottomNav.vue'
+
+const route = useRoute()
+const isPublicPage = computed(() => route.meta?.public)
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="app-layout">
+    <!-- Sidebar (only when logged in) -->
+    <AppSidebar v-if="appState.isLoggedIn && !isPublicPage" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <!-- Main Content -->
+    <main :class="['app-main', { 'full-width': !appState.isLoggedIn || isPublicPage }]">
+      <RouterView v-slot="{ Component }">
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </Transition>
+      </RouterView>
+    </main>
 
-  <main>
-    <TheWelcome />
-  </main>
+    <!-- Bottom Nav (Mobile) -->
+    <AppBottomNav v-if="appState.isLoggedIn && !isPublicPage" />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+<style>
+.full-width {
+  margin-left: 0 !important;
 }
 </style>

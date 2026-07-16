@@ -1,0 +1,104 @@
+[
+  {
+    "id": "conv001",
+    "buyerId": "u001",
+    "sellerId": "u002",
+    "productId": "p005",
+    "productTitle": "Principles of Economics 12th Ed.",
+    "lastMessage": "That sounds perfect. I'm actually in the Main Library right now...",
+    "lastTimestamp": "2026-07-15T14:42:00Z",
+    "unread": 1,
+    "messages": [
+      {
+        "id": "m001",
+        "senderId": "u001",
+        "text": "สวัสดีครับ! ยังมีตำรา Introduction to Economics Textbook อยู่ไหมครับ? สามารถซื้อได้เลยไหม?",
+        "timestamp": "2026-07-15T09:15:00Z"
+      },
+      {
+        "id": "m002",
+        "senderId": "u002",
+        "text": "สวัสดีครับ Tanawat! ใช่ครับ ยังมีอยู่เลย สภาพดีมาก มีไฮไลต์นิดหน่อยแค่ chapter 1-2 เท่านั้น",
+        "timestamp": "2026-07-15T09:22:00Z"
+      },
+      {
+        "id": "m003",
+        "senderId": "u001",
+        "text": "โอเค ดีเลย ขอบคุณครับ! เราสามารถเจอกันได้ที่ไหนครับ?",
+        "timestamp": "2026-07-15T14:30:00Z"
+      },
+      {
+        "id": "m004",
+        "senderId": "u002",
+        "text": "That sounds perfect. I'm actually in the Main Library right now. Would you be able to meet around 1 PM for the handover?",
+        "timestamp": "2026-07-15T14:42:00Z"
+      },
+      {
+        "id": "m005",
+        "senderId": "u001",
+        "text": "1 PM at the library works for me! I'll be near the front entrance. See you then.",
+        "timestamp": "2026-07-15T14:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": "conv002",
+    "buyerId": "u003",
+    "sellerId": "u002",
+    "productId": "p003",
+    "productTitle": "Wireless Headphones Sony WH-1000XM4",
+    "lastMessage": "Thank you! The delivery was really fast.",
+    "lastTimestamp": "2026-07-14T10:00:00Z",
+    "unread": 0,
+    "messages": [
+      {
+        "id": "m006",
+        "senderId": "u003",
+        "text": "หูฟัง Sony ยังว่างอยู่ไหมคะ?",
+        "timestamp": "2026-07-13T08:00:00Z"
+      },
+      {
+        "id": "m007",
+        "senderId": "u002",
+        "text": "ว่างอยู่ครับ สภาพดีมาก ANC ทำงานได้ปกติเลย",
+        "timestamp": "2026-07-13T08:30:00Z"
+      },
+      {
+        "id": "m008",
+        "senderId": "u003",
+        "text": "Thank you! The delivery was really fast.",
+        "timestamp": "2026-07-14T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "conv003",
+    "buyerId": "u001",
+    "sellerId": "u004",
+    "productId": "p002",
+    "productTitle": "Ergonomic Laptop Backpack",
+    "lastMessage": "Can we meet at the Digital Gateway?",
+    "lastTimestamp": "2026-07-12T11:00:00Z",
+    "unread": 0,
+    "messages": [
+      {
+        "id": "m009",
+        "senderId": "u001",
+        "text": "สวัสดีครับ กระเป๋ายังมีอยู่ไหมครับ?",
+        "timestamp": "2026-07-12T10:00:00Z"
+      },
+      {
+        "id": "m010",
+        "senderId": "u004",
+        "text": "ยังอยู่ครับ สภาพดีมาก สายพาดบ่ายังนุ่มอยู่เลย",
+        "timestamp": "2026-07-12T10:30:00Z"
+      },
+      {
+        "id": "m011",
+        "senderId": "u001",
+        "text": "Can we meet at the Digital Gateway?",
+        "timestamp": "2026-07-12T11:00:00Z"
+      }
+    ]
+  }
+]

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "u001",
+    "name": "Tanawat S.",
+    "studentId": "6450XXXXX",
+    "email": "tanawat.s@ku.th",
+    "faculty": "Faculty of Engineering",
+    "role": "buyer",
+    "avatar": "TS",
+    "avatarColor": "#15803d",
+    "rating": 4.9,
+    "verified": true,
+    "joinedDate": "2024-08-01"
+  },
+  {
+    "id": "u002",
+    "name": "Naphat Sakulthai",
+    "studentId": "6450YYYYY",
+    "email": "naphat.s@ku.th",
+    "faculty": "Faculty of Engineering",
+    "role": "seller",
+    "avatar": "NS",
+    "avatarColor": "#1d4ed8",
+    "rating": 4.8,
+    "verified": true,
+    "joinedDate": "2024-07-15",
+    "activeListings": 12,
+    "totalSold": 45
+  },
+  {
+    "id": "u003",
+    "name": "Praew P.",
+    "studentId": "6450ZZZZZ",
+    "email": "praew.p@ku.th",
+    "faculty": "Faculty of Science",
+    "role": "buyer",
+    "avatar": "PP",
+    "avatarColor": "#9333ea",
+    "rating": 4.7,
+    "verified": true,
+    "joinedDate": "2024-09-01"
+  },
+  {
+    "id": "u004",
+    "name": "Kittipong M.",
+    "studentId": "6450AAAAA",
+    "email": "kittipong.m@ku.th",
+    "faculty": "Faculty of Engineering",
+    "role": "seller",
+    "avatar": "KM",
+    "avatarColor": "#b45309",
+    "rating": 4.6,
+    "verified": true,
+    "joinedDate": "2024-06-01",
+    "activeListings": 8,
+    "totalSold": 23
+  },
+  {
+    "id": "u005",
+    "name": "Jane Doe",
+    "studentId": "6450BBBBB",
+    "email": "jane.doe@ku.th",
+    "faculty": "Faculty of Business",
+    "role": "buyer",
+    "avatar": "JD",
+    "avatarColor": "#0891b2",
+    "rating": 5.0,
+    "verified": true,
+    "joinedDate": "2024-10-01"
+  }
+]

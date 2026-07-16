@@ -1,0 +1,46 @@
+[
+  {
+    "code": "KU2024",
+    "type": "discount",
+    "value": 100,
+    "description": "ส่วนลด 100 บาท สำหรับนิสิต KU",
+    "sellerId": "u002",
+    "minOrder": 500,
+    "expiresAt": "2026-12-31",
+    "usedCount": 14,
+    "active": true
+  },
+  {
+    "code": "FREESHIP",
+    "type": "freeship",
+    "value": 0,
+    "description": "ส่งฟรีไม่มีขั้นต่ำ",
+    "sellerId": "u002",
+    "minOrder": 0,
+    "expiresAt": "2026-08-31",
+    "usedCount": 5,
+    "active": true
+  },
+  {
+    "code": "FLASH50",
+    "type": "discount",
+    "value": 50,
+    "description": "Flash Sale ลด 50 บาท",
+    "sellerId": "u004",
+    "minOrder": 200,
+    "expiresAt": "2026-07-20",
+    "usedCount": 2,
+    "active": true
+  },
+  {
+    "code": "SUMMER200",
+    "type": "discount",
+    "value": 200,
+    "description": "Summer Sale ลด 200 บาท",
+    "sellerId": "u004",
+    "minOrder": 1000,
+    "expiresAt": "2026-07-31",
+    "usedCount": 0,
+    "active": false
+  }
+]
