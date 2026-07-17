@@ -4,26 +4,13 @@ import { useRoute } from 'vue-router'
 import { appState, cartCount, unreadCount } from '../stores/app.js'
 
 const route = useRoute()
-const isSeller = computed(() => appState.currentUser?.role === 'seller')
-
-const tabs = computed(() => {
-  if (isSeller.value) {
-    return [
-      { path: '/home', icon: 'bi-house', label: 'Home' },
-      { path: '/seller/dashboard', icon: 'bi-speedometer2', label: 'Sell' },
-      { path: '/seller/orders', icon: 'bi-bag-check', label: 'Orders' },
-      { path: '/messages', icon: 'bi-chat-dots', label: 'Chat', badge: unreadCount.value },
-      { path: '/profile', icon: 'bi-person-circle', label: 'Profile' },
-    ]
-  }
-  return [
-    { path: '/home', icon: 'bi-house', label: 'Home' },
-    { path: '/products', icon: 'bi-search', label: 'Browse' },
-    { path: '/cart', icon: 'bi-cart3', label: 'Cart', badge: cartCount.value },
-    { path: '/messages', icon: 'bi-chat-dots', label: 'Chat', badge: unreadCount.value },
-    { path: '/profile', icon: 'bi-person-circle', label: 'Profile' },
-  ]
-})
+const tabs = computed(() => [
+  { path: '/home', icon: 'bi-house', label: 'Home' },
+  { path: '/products', icon: 'bi-search', label: 'Browse' },
+  { path: '/seller/products', icon: 'bi-shop', label: 'Sell' },
+  { path: '/messages', icon: 'bi-chat-dots', label: 'Chat', badge: unreadCount.value },
+  { path: '/profile', icon: 'bi-person-circle', label: 'Profile' },
+])
 </script>
 
 <template>

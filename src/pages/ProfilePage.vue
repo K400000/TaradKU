@@ -1,51 +1,19 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { appState, myOrders, myProducts, switchRole, logout } from '../stores/app.js'
+import { appState, myOrders, myProducts, logout } from '../stores/app.js'
 import AppTopBar from '../components/AppTopBar.vue'
 
 const router = useRouter()
 const activeTab = ref('listings')
-const isSeller = computed(() => appState.currentUser?.role === 'seller')
 
 const STATUS_LABELS = { pending: 'รอส่ง', shipped: 'กำลังส่ง', delivered: 'ส่งแล้ว' }
 const STATUS_ICONS = { pending: 'bi-hourglass-split', shipped: 'bi-truck', delivered: 'bi-check-circle-fill' }
 
 const CATEGORY_ICONS = { Electronics: 'bi-cpu', Books: 'bi-book', Fashion: 'bi-bag', Accessories: 'bi-backpack', Stationery: 'bi-pencil', Housing: 'bi-house', Sports: 'bi-trophy', default: 'bi-box-seam' }
 
-// Seller Membership Renewal State
-const sellerStatus = ref('expiring_23') // 'expiring_23' | 'expired' | 'active'
-const showRenewModal = ref(false)
-const renewPaymentMethod = ref('PromptPay')
-
-const expiryDateText = computed(() => {
-  if (sellerStatus.value === 'active') {
-    return '· ใช้งานได้ถึง 23 ส.ค. 2026'
-  }
-  if (sellerStatus.value === 'expired') {
-    return '· ครบกำหนดไปแล้วเมื่อ 23 ก.ค. 2026'
-  }
-  return '· ครบกำหนดชำระวันที่ 23 ก.ค. 2026'
-})
-
-function handleSwitchRole() {
-  const newRole = appState.currentUser?.role === 'buyer' ? 'seller' : 'buyer'
-  switchRole(newRole)
-}
-
-function handleConfirmRenew() {
-  sellerStatus.value = 'active'
-  showRenewModal.value = false
-  alert('🎉 ชำระเงินต่ออายุสิทธิ์ผู้ขายเรียบร้อยแล้ว!\nขอบคุณที่ใช้บริการ TaradKU Pro Seller (คุ้มครองถึง 23 ส.ค. 2026)')
-}
-
 function handleRestrictedAction(e, targetPath = null) {
-  if (sellerStatus.value === 'expired') {
-    if (e) e.preventDefault()
-    alert('⚠️ ไม่สามารถดำเนินการได้เนื่องจากสิทธิ์ผู้ขายหมดอายุแล้วเมื่อวันที่ 23 ก.ค. 2026\n\nกรุณากดปุ่ม "⚡ ต่ออายุการขาย (99฿ / เดือน)" เพื่อปลดล็อกสิทธิ์การลงขายและจัดการสินค้าครับ')
-    showRenewModal.value = true
-    return false
-  }
+  if (e) e.preventDefault()
   if (targetPath) router.push(targetPath)
 }
 
@@ -122,56 +90,27 @@ function handleLogout() {
 
         <!-- Right: Content -->
         <main class="profile-main">
-          <!-- Role Switch Banner -->
-          <div class="role-switch-banner card card-pad">
-            <div>
-              <div class="role-current">
-                Current Mode: <strong><i :class="isSeller ? 'bi bi-shop' : 'bi bi-cart3'"></i> {{ isSeller ? 'Seller' : 'Buyer' }}</strong>
-              </div>
-              <div class="role-sub">Switch to {{ isSeller ? 'Buyer' : 'Seller' }} mode to {{ isSeller ? 'browse and buy items' : 'start selling your items' }}</div>
-            </div>
-            <button class="btn btn-primary btn-sm" @click="handleSwitchRole" id="switch-role-btn">
-              <i class="bi bi-arrow-repeat me-1"></i> Switch to {{ isSeller ? 'Buyer' : 'Seller' }}
-            </button>
-          </div>
-
-          <!-- Seller Membership Renewal Banner (Visible only in Seller Mode) -->
-          <div class="seller-renewal-banner card card-pad" :class="{ 'expired-banner': sellerStatus === 'expired' }" v-if="isSeller">
+          <!-- Seller Commission Status Banner -->
+          <div class="seller-commission-banner card card-pad">
             <div class="renewal-content">
               <div class="renewal-badge-row">
-                <span class="badge" :class="sellerStatus === 'active' ? 'badge-success' : sellerStatus === 'expired' ? 'badge-danger' : 'badge-warning'">
-                  <i :class="sellerStatus === 'active' ? 'bi bi-check-circle-fill me-1' : sellerStatus === 'expired' ? 'bi bi-x-circle-fill me-1' : 'bi bi-exclamation-triangle-fill me-1'"></i>
-                  {{ sellerStatus === 'active' ? 'ต่ออายุสมาชิกแล้ว (Active)' : sellerStatus === 'expired' ? 'หมดอายุแล้ว (Expired)' : 'ใกล้ครบกำหนด (อีก 7 วัน)' }}
+                <span class="badge badge-success">
+                  <i class="bi bi-check-circle-fill me-1"></i> TaradKU Pro Seller (Active)
                 </span>
-                <span class="expiry-text">{{ expiryDateText }}</span>
+                <span class="expiry-text">· ฟรีค่าธรรมเนียมรายเดือน 100% (No Monthly Fee)</span>
               </div>
-              <h3 class="renewal-title" :class="{ 'text-danger-title': sellerStatus === 'expired' }">
-                <i class="bi bi-patch-check-fill text-green me-1" v-if="sellerStatus !== 'expired'"></i>
-                <i class="bi bi-shield-exclamation text-danger me-1" v-else></i>
-                สิทธิ์ผู้ขายร้านค้า TaradKU Pro Seller
+              <h3 class="renewal-title">
+                <i class="bi bi-patch-check-fill text-green me-1"></i> สิทธิ์ผู้ขายร้านค้า TaradKU Pro Seller
               </h3>
-              <p class="renewal-desc" v-if="sellerStatus !== 'expired'">โควตาลงขายสินค้าไม่จำกัด · แสดงป้าย Verified Student Seller น่าเชื่อถือ · ระบบจัดการโปรโมชั่น</p>
-              <p class="renewal-desc text-danger-desc" v-else>🚫 สิทธิ์การลงขายสินค้าใหม่และการโปรโมทร้านค้าถูกระงับชั่วคราว เนื่องจากเลยกำหนดชำระค่าสมาชิกเมื่อ 23 ก.ค. 2026 กรุณาต่ออายุเพื่อเปิดใช้งาน</p>
+              <p class="renewal-desc">✔ ลงขายสินค้าได้ไม่จำกัดจำนวนชิ้น · ✔ แสดงป้าย Verified Student Seller น่าเชื่อถือ · ✔ ไม่มีค่าบริการรายเดือน</p>
+              <div class="commission-note mt-2">
+                <span class="badge badge-green-light"><i class="bi bi-info-circle me-1"></i> ระบบ Commission 3.5%</span>
+                <span class="text-xs text-secondary ms-2">ทางระบบคิดค่าบริการ Commission 3.5% จากยอดขายเฉพาะเมื่อมีการสั่งซื้อและส่งมอบสินค้าสำเร็จเท่านั้น</span>
+              </div>
             </div>
-            <button class="btn" :class="sellerStatus === 'expired' ? 'btn-danger-btn' : 'btn-warning-btn'" @click="showRenewModal = true" id="renew-btn">
-              <i class="bi bi-lightning-charge-fill me-1"></i> {{ sellerStatus === 'expired' ? 'ชำระเงินเพื่อปลดล็อก (99฿)' : 'ต่ออายุการขาย (99฿ / เดือน)' }}
-            </button>
-          </div>
-
-          <!-- Mockup Simulation Switcher -->
-          <div class="mockup-sim-bar card" v-if="isSeller">
-            <div class="sim-label"><i class="bi bi-joystick me-1 text-green"></i> <strong>Mockup Simulation:</strong> จำลองทดสอบสถานะสิทธิ์ผู้ขาย</div>
-            <div class="sim-btn-group">
-              <button class="btn btn-xs" :class="sellerStatus === 'expiring_23' ? 'btn-sim-active' : 'btn-outline'" @click="sellerStatus = 'expiring_23'">
-                ⏳ ครบกำหนด 23 ก.ค.
-              </button>
-              <button class="btn btn-xs" :class="sellerStatus === 'expired' ? 'btn-sim-danger' : 'btn-outline'" @click="sellerStatus = 'expired'">
-                ❌ จำลองเมื่อหมดอายุ (Expired)
-              </button>
-              <button class="btn btn-xs" :class="sellerStatus === 'active' ? 'btn-sim-success' : 'btn-outline'" @click="sellerStatus = 'active'">
-                🟢 ต่ออายุแล้ว (Active)
-              </button>
-            </div>
+            <RouterLink to="/seller/products" class="btn btn-primary btn-sm" id="manage-shop-btn">
+              <i class="bi bi-shop me-1"></i> หน้าจัดการสินค้า & Dashboard
+            </RouterLink>
           </div>
 
           <!-- Tabs -->
@@ -260,61 +199,7 @@ function handleLogout() {
       </div>
     </div>
 
-    <!-- Renew Membership Modal -->
-    <Transition name="fade">
-      <div class="renew-modal-overlay" v-if="showRenewModal" @click.self="showRenewModal = false">
-        <div class="renew-modal card">
-          <div class="modal-header">
-            <div>
-              <h3 class="modal-title"><i class="bi bi-patch-check-fill text-green me-2"></i> ต่ออายุสมาชิกผู้ขาย TaradKU Pro</h3>
-              <p class="modal-subtitle">รักษาสิทธิ์การลงขาย และเพิ่มความน่าเชื่อถือให้กับร้านค้าของคุณในมหาวิทยาลัย</p>
-            </div>
-            <button class="btn-close-modal" @click="showRenewModal = false" id="close-renew-modal"><i class="bi bi-x-lg"></i></button>
-          </div>
 
-          <div class="modal-body">
-            <div class="renew-price-box">
-              <div class="price-val">99 บาท</div>
-              <div class="price-period">/ เดือน (ต่ออายุสิทธิ์ 30 วัน)</div>
-            </div>
-
-            <div class="renew-perks">
-              <div class="perk-item"><i class="bi bi-check-circle-fill text-green"></i> <span>ลงขายสินค้าได้ไม่จำกัดจำนวนชิ้น พร้อมระบบจัดการออเดอร์</span></div>
-              <div class="perk-item"><i class="bi bi-check-circle-fill text-green"></i> <span>แสดงป้าย <strong>✓ Verified Student Seller</strong> โดดเด่นเหนือใคร</span></div>
-              <div class="perk-item"><i class="bi bi-check-circle-fill text-green"></i> <span>สร้างโค้ดส่วนลด และร่วมแคมเปญ Flash Sale ของมหาวิทยาลัย</span></div>
-            </div>
-
-            <div class="form-group" style="margin-top: 18px;">
-              <label class="form-label">เลือกช่องทางชำระเงิน (Payment Method)</label>
-              <div class="pay-methods-grid">
-                <label class="pay-option" :class="{ selected: renewPaymentMethod === 'PromptPay' }">
-                  <input type="radio" v-model="renewPaymentMethod" value="PromptPay" />
-                  <i class="bi bi-qr-code-scan pay-icon"></i>
-                  <span>PromptPay QR</span>
-                </label>
-                <label class="pay-option" :class="{ selected: renewPaymentMethod === 'CreditCard' }">
-                  <input type="radio" v-model="renewPaymentMethod" value="CreditCard" />
-                  <i class="bi bi-credit-card pay-icon"></i>
-                  <span>Credit Card</span>
-                </label>
-                <label class="pay-option" :class="{ selected: renewPaymentMethod === 'MobileBanking' }">
-                  <input type="radio" v-model="renewPaymentMethod" value="MobileBanking" />
-                  <i class="bi bi-phone pay-icon"></i>
-                  <span>Mobile Banking</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button class="btn btn-ghost" @click="showRenewModal = false">ยกเลิก</button>
-            <button class="btn btn-primary btn-lg" @click="handleConfirmRenew" id="confirm-pay-renew-btn">
-              <i class="bi bi-shield-lock-fill me-1"></i> ชำระเงิน 99 บาท & ต่ออายุทันที
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
@@ -416,40 +301,18 @@ function handleLogout() {
 .bar-fill { height: 100%; background: var(--green-500); border-radius: 4px; }
 .bar-count { font-size: 12px; color: var(--text-secondary); width: 20px; }
 
-/* Renewal Modal */
-.renew-modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.55); z-index: 9999; display: flex; align-items: center; justify-content: center;
-  padding: 20px;
+.seller-commission-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #86efac;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
-.renew-modal {
-  width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
-  background: #fff; border-radius: var(--radius-xl); box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-  display: flex; flex-direction: column;
-}
-.modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 20px 24px 16px; border-bottom: 1px solid var(--border); }
-.modal-title { font-size: 17px; font-weight: 700; display: flex; align-items: center; }
-.modal-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.btn-close-modal { background: var(--bg-page); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.15s; }
-.btn-close-modal:hover { background: var(--border); color: var(--text-primary); }
-.modal-body { padding: 20px 24px; flex: 1; }
-
-.renew-price-box { text-align: center; background: var(--green-50); border: 2px solid var(--green-300); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; }
-.price-val { font-size: 36px; font-weight: 800; color: var(--green-700); line-height: 1; }
-.price-period { font-size: 13px; color: var(--green-800); font-weight: 600; margin-top: 4px; }
-
-.renew-perks { display: flex; flex-direction: column; gap: 10px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; }
-.perk-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-primary); line-height: 1.4; }
-.perk-item i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-.pay-methods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
-.pay-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; font-size: 12px; font-weight: 600; text-align: center; }
-.pay-option input { display: none; }
-.pay-option:hover { border-color: var(--green-400); background: var(--green-50); }
-.pay-option.selected { border-color: var(--green-600); background: var(--green-50); color: var(--green-700); }
-.pay-icon { font-size: 22px; color: var(--green-600); }
-
-.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border); background: var(--bg-page); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.commission-note { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.badge-green-light { background: #bbf7d0; color: #166534; font-weight: 700; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
 
 @media (max-width: 768px) {
   .profile-page { padding: 16px; }

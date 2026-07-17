@@ -7,29 +7,20 @@ import logoImg from '../assets/logo_branding.png'
 const router = useRouter()
 const route = useRoute()
 
-const isSeller = computed(() => appState.currentUser?.role === 'seller')
-
-const navItems = computed(() => {
-  if (isSeller.value) {
-    return [
-      { name: 'Home', path: '/home', icon: 'bi-house', label: 'หน้าแรก' },
-      { name: 'SellerDashboard', path: '/seller/dashboard', icon: 'bi-speedometer2', label: 'Dashboard' },
-      { name: 'SellerProducts', path: '/seller/products', icon: 'bi-box-seam', label: 'สินค้า' },
-      { name: 'SellerOrders', path: '/seller/orders', icon: 'bi-bag-check', label: 'ออเดอร์' },
-      { name: 'SellerPromotions', path: '/seller/promotions', icon: 'bi-gift', label: 'โปรโมชั่น' },
-      { name: 'Messages', path: '/messages', icon: 'bi-chat-dots', label: 'ข้อความ', badge: unreadCount.value },
-      { name: 'Profile', path: '/profile', icon: 'bi-person-circle', label: 'โปรไฟล์' },
-    ]
-  }
-  return [
-    { name: 'Home', path: '/home', icon: 'bi-house', label: 'หน้าแรก' },
-    { name: 'ProductList', path: '/products', icon: 'bi-search', label: 'ค้นหาสินค้า' },
-    { name: 'Cart', path: '/cart', icon: 'bi-cart3', label: 'ตะกร้า', badge: cartCount.value },
-    { name: 'OrderTracking', path: '/orders', icon: 'bi-truck', label: 'ออเดอร์' },
-    { name: 'Messages', path: '/messages', icon: 'bi-chat-dots', label: 'ข้อความ', badge: unreadCount.value },
-    { name: 'Profile', path: '/profile', icon: 'bi-person-circle', label: 'โปรไฟล์' },
-  ]
-})
+const navItems = computed(() => [
+  { isHeader: true, label: 'ซื้อสินค้า (Buyer)' },
+  { name: 'Home', path: '/home', icon: 'bi-house', label: 'หน้าแรก' },
+  { name: 'ProductList', path: '/products', icon: 'bi-search', label: 'ค้นหาสินค้า' },
+  { name: 'Cart', path: '/cart', icon: 'bi-cart3', label: 'ตะกร้า', badge: cartCount.value },
+  { name: 'OrderTracking', path: '/orders', icon: 'bi-truck', label: 'ออเดอร์ของฉัน' },
+  { isHeader: true, label: 'ขายสินค้า (Seller)' },
+  { name: 'SellerProducts', path: '/seller/products', icon: 'bi-shop', label: 'สินค้าที่เราขาย (Dashboard)' },
+  { name: 'SellerOrders', path: '/seller/orders', icon: 'bi-bag-check', label: 'ออเดอร์ลูกค้า' },
+  { name: 'SellerPromotions', path: '/seller/promotions', icon: 'bi-gift', label: 'โปรโมชั่นร้านค้า' },
+  { isHeader: true, label: 'ส่วนตัว' },
+  { name: 'Messages', path: '/messages', icon: 'bi-chat-dots', label: 'ข้อความ', badge: unreadCount.value },
+  { name: 'Profile', path: '/profile', icon: 'bi-person-circle', label: 'โปรไฟล์' },
+])
 
 function handleLogout() {
   logout()
@@ -45,7 +36,7 @@ function handleLogout() {
         <img :src="logoImg" alt="TaradKU Logo" class="brand-img" />
         <div>
           <div class="brand-name">TaradKU</div>
-          <div class="brand-sub">{{ isSeller ? 'Seller Mode' : 'Campus Marketplace' }}</div>
+          <div class="brand-sub">Campus Marketplace</div>
         </div>
       </div>
     </div>
@@ -65,17 +56,19 @@ function handleLogout() {
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
-      <RouterLink
-        v-for="item in navItems"
-        :key="item.path"
-        :to="item.path"
-        class="nav-item"
-        :class="{ 'nav-active': route.path === item.path || (item.path !== '/home' && route.path.startsWith(item.path)) }"
-      >
-        <i :class="['nav-icon', 'bi', item.icon]"></i>
-        <span class="nav-label">{{ item.label }}</span>
-        <span v-if="item.badge && item.badge > 0" class="nav-badge">{{ item.badge }}</span>
-      </RouterLink>
+      <template v-for="(item, idx) in navItems" :key="item.path || idx">
+        <div v-if="item.isHeader" class="nav-header">{{ item.label }}</div>
+        <RouterLink
+          v-else
+          :to="item.path"
+          class="nav-item"
+          :class="{ 'nav-active': route.path === item.path || (item.path !== '/home' && route.path.startsWith(item.path)) }"
+        >
+          <i :class="['nav-icon', 'bi', item.icon]"></i>
+          <span class="nav-label">{{ item.label }}</span>
+          <span v-if="item.badge && item.badge > 0" class="nav-badge">{{ item.badge }}</span>
+        </RouterLink>
+      </template>
     </nav>
 
     <div style="flex: 1;"></div>
@@ -144,10 +137,19 @@ function handleLogout() {
 }
 
 .sidebar-nav {
-  padding: 10px 8px 0;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  overflow-y: auto;
+}
+.nav-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.48);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 12px 4px;
 }
 
 .nav-item {

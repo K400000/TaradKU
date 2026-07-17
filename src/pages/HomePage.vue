@@ -35,8 +35,6 @@ const freshListings = computed(() => {
   }
   return list.slice(0, 8)
 })
-
-const isSeller = computed(() => appState.currentUser?.role === 'seller')
 </script>
 
 <template>

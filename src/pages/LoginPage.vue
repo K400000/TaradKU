@@ -7,7 +7,6 @@ import logoImg from '../assets/logo_branding.png'
 const router = useRouter()
 const studentId = ref('')
 const password = ref('')
-const role = ref('buyer')
 const error = ref('')
 const loading = ref(false)
 const showPass = ref(false)
@@ -16,16 +15,16 @@ function handleLogin() {
   if (!studentId.value) { error.value = 'กรุณากรอกรหัสนิสิต'; return }
   loading.value = true
   setTimeout(() => {
-    login(studentId.value, password.value, role.value)
+    login(studentId.value, password.value, 'buyer')
     loading.value = false
     router.push('/home')
   }, 800)
 }
 
-function handleDemoLogin(r) {
+function handleDemoLogin() {
   loading.value = true
   setTimeout(() => {
-    loginAsDemo(r)
+    loginAsDemo('buyer')
     loading.value = false
     router.push('/home')
   }, 600)
@@ -82,16 +81,6 @@ function handleDemoLogin(r) {
         </div>
 
         <form @submit.prevent="handleLogin" class="login-form">
-          <!-- Role Selector -->
-          <div class="role-tabs">
-            <button type="button" class="role-tab" :class="{ active: role === 'buyer' }" @click="role = 'buyer'" id="role-buyer-btn">
-              <i class="bi bi-cart3"></i> ผู้ซื้อ
-            </button>
-            <button type="button" class="role-tab" :class="{ active: role === 'seller' }" @click="role = 'seller'" id="role-seller-btn">
-              <i class="bi bi-shop"></i> ผู้ขาย
-            </button>
-          </div>
-
           <div class="form-group">
             <label class="form-label" for="student-id">รหัสนิสิต / Student ID</label>
             <div class="input-icon-wrap">
@@ -121,23 +110,15 @@ function handleDemoLogin(r) {
 
         <div class="divider-row">
           <hr class="divider" />
-          <span class="divider-text">หรือลองใช้งาน Demo</span>
+          <span class="divider-text">หรือทดลองใช้งานโดยไม่ต้องกรอกรหัส</span>
           <hr class="divider" />
         </div>
 
         <div class="demo-btns">
-          <button class="btn btn-outline btn-full" @click="handleDemoLogin('buyer')" id="demo-buyer-btn">
-            <i class="bi bi-cart3"></i> Demo — Buyer
-          </button>
-          <button class="btn btn-ghost btn-full" @click="handleDemoLogin('seller')" id="demo-seller-btn">
-            <i class="bi bi-shop"></i> Demo — Seller
+          <button type="button" class="btn btn-outline btn-full" @click="handleDemoLogin()" id="demo-login-btn">
+            <i class="bi bi-play-circle-fill me-1 text-green"></i> เข้าสู่ระบบด้วยบัญชีตัวอย่าง (Demo Account)
           </button>
         </div>
-
-        <p class="register-link">
-          ยังไม่มีบัญชี?
-          <RouterLink to="/register" class="link-green">สมัครสมาชิก</RouterLink>
-        </p>
       </div>
     </div>
   </div>
@@ -252,34 +233,7 @@ function handleDemoLogin(r) {
 
 .login-form { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
 
-.role-tabs {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-page);
-  padding: 4px;
-  border-radius: var(--radius-md);
-}
-.role-tab {
-  flex: 1;
-  padding: 9px;
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.role-tab.active {
-  background: #fff;
-  color: var(--green-700);
-  box-shadow: var(--shadow-sm);
-}
+
 
 /* Input with icon */
 .input-icon-wrap { position: relative; }
@@ -300,8 +254,7 @@ function handleDemoLogin(r) {
 .demo-btns { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .demo-btns .btn i { font-size: 14px; }
 
-.register-link { font-size: 13px; color: var(--text-secondary); text-align: center; }
-.link-green { color: var(--green-600); font-weight: 600; }
+
 
 @media (max-width: 768px) {
   .login-left { display: none; }

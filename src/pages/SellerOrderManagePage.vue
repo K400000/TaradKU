@@ -72,7 +72,10 @@ function handlePrintLabel(order) {
           <div class="order-meta">
             <div class="meta-item"><i class="bi bi-credit-card"></i> {{ order.paymentMethod }}</div>
             <div class="meta-item"><i class="bi bi-geo-alt"></i> {{ order.meetingLocation }}</div>
-            <div class="meta-item meta-total">฿{{ order.totalAmount.toLocaleString('th-TH') }}</div>
+            <div class="meta-item meta-total">
+              <span>฿{{ order.totalAmount.toLocaleString('th-TH') }}</span>
+              <span class="text-xs text-green ms-2 font-bold" style="font-size: 12px; color: var(--green-600);">(รับสุทธิหลังหัก 3.5%: ฿{{ (order.totalAmount - Math.round(order.totalAmount * 0.035)).toLocaleString('th-TH') }})</span>
+            </div>
           </div>
 
           <div class="order-card-actions">

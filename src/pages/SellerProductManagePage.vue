@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { appState, myProducts, addProduct, deleteProduct } from '../stores/app.js'
+import { appState, myProducts, sellerOrders, addProduct, deleteProduct } from '../stores/app.js'
 import AppTopBar from '../components/AppTopBar.vue'
 
 const showForm = ref(false)
@@ -10,6 +10,19 @@ const conditions = ['Like New', 'Good', 'Fair']
 const activeTab = ref('All')
 
 const CATEGORY_ICONS = { Electronics: 'bi-cpu', Books: 'bi-book', Fashion: 'bi-bag', Accessories: 'bi-backpack', Stationery: 'bi-pencil', Housing: 'bi-house', Sports: 'bi-trophy', default: 'bi-box-seam' }
+
+const activeListings = computed(() => myProducts.value.length)
+const pendingOrders = computed(() => sellerOrders.value.filter(o => o.status === 'pending').length)
+const grossRevenue = computed(() => sellerOrders.value.reduce((s, o) => s + o.totalAmount, 0))
+const commissionFee = computed(() => Math.round(grossRevenue.value * 0.035))
+const netRevenue = computed(() => grossRevenue.value - commissionFee.value)
+
+const statCards = computed(() => [
+  { icon: 'bi-box-seam', label: 'Active Listings', val: activeListings.value, cls: '' },
+  { icon: 'bi-bag-check', label: 'Total Orders', val: sellerOrders.value.length, cls: '' },
+  { icon: 'bi-currency-dollar', label: 'Gross Revenue', val: `฿${grossRevenue.value.toLocaleString('th-TH')}`, cls: '' },
+  { icon: 'bi-wallet2', label: 'Net Earnings (หัก 3.5%)', val: `฿${netRevenue.value.toLocaleString('th-TH')}`, cls: 'green' },
+])
 
 const filteredProducts = computed(() => {
   if (activeTab.value === 'All') return myProducts.value
@@ -42,6 +55,34 @@ function handleSubmit() {
 
       <!-- Listing Table View -->
       <div class="manage-layout" v-if="!showForm">
+        <!-- Seller Dashboard Header Section -->
+        <div class="seller-dash-summary">
+          <div class="dash-top-row">
+            <div>
+              <h2 class="dash-title"><i class="bi bi-speedometer2 text-green me-2"></i>Dashboard ร้านค้า (Seller Overview)</h2>
+              <p class="dash-subtitle">สรุปยอดขายและสถานะรายการสินค้าที่ลงขายทั้งหมดของคุณ</p>
+            </div>
+            <div class="dash-quick-links">
+              <RouterLink to="/seller/orders" class="btn btn-outline btn-sm"><i class="bi bi-bag-check me-1"></i> ออเดอร์ลูกค้า ({{ sellerOrders.length }})</RouterLink>
+              <RouterLink to="/seller/promotions" class="btn btn-outline btn-sm"><i class="bi bi-gift me-1"></i> โปรโมชั่น</RouterLink>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card card card-pad" v-for="s in statCards" :key="s.label">
+              <div class="stat-icon-wrap"><i :class="['bi', s.icon, 'stat-icon']"></i></div>
+              <div class="stat-val" :class="s.cls">{{ s.val }}</div>
+              <div class="stat-lbl">{{ s.label }}</div>
+            </div>
+          </div>
+
+          <div class="commission-info-banner mt-3">
+            <span class="badge badge-green-light"><i class="bi bi-info-circle-fill me-1"></i> ระบบ Commission 3.5%</span>
+            <span class="text-xs text-secondary ms-2">ทางระบบ TaradKU ไม่เก็บค่าธรรมเนียมลงขายหรือค่าสมาชิกรายเดือน โดยจะคิดค่าบริการ Commission 3.5% จากยอดขายเฉพาะเมื่อมีการสั่งซื้อและส่งมอบสินค้าสำเร็จเท่านั้น (Platform Fee 3.5%)</span>
+          </div>
+          <hr class="dash-divider" />
+        </div>
+
         <div class="manage-header">
           <div>
             <h1 class="page-title">ลงขายสินค้า</h1>
@@ -145,6 +186,12 @@ function handleSubmit() {
                   <i class="bi bi-currency-dollar input-icon"></i>
                   <input id="item-price" v-model="form.price" class="form-input input-with-icon" type="number" placeholder="0.00" />
                 </div>
+                <div v-if="form.price && Number(form.price) > 0" class="fee-calc-box mt-2">
+                  <div class="fee-row text-xs text-secondary"><span>ราคาขายสินค้า:</span> <span>฿{{ Number(form.price).toLocaleString('th-TH') }}</span></div>
+                  <div class="fee-row text-xs text-danger"><span>ค่าธรรมเนียมระบบ Commission (3.5%):</span> <span>-฿{{ Math.round(Number(form.price) * 0.035).toLocaleString('th-TH') }}</span></div>
+                  <hr style="margin: 4px 0; border-color: var(--border);" />
+                  <div class="fee-row text-xs font-bold text-green"><span>ยอดเงินที่จะได้รับสุทธิ (Net Earnings):</span> <span>฿{{ (Number(form.price) - Math.round(Number(form.price) * 0.035)).toLocaleString('th-TH') }}</span></div>
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="item-cat">Category</label>
@@ -187,6 +234,20 @@ function handleSubmit() {
 
 <style scoped>
 .manage-page { padding: 20px 28px 40px; }
+.dash-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.dash-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+.dash-subtitle { font-size: 13px; color: var(--text-secondary); }
+.dash-quick-links { display: flex; gap: 8px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card { text-align: center; }
+.stat-icon-wrap { margin-bottom: 8px; }
+.stat-icon { font-size: 24px; color: var(--green-500); }
+.stat-val { font-size: 24px; font-weight: 800; color: var(--text-primary); }
+.stat-val.pending { color: #f59e0b; }
+.stat-val.green { color: var(--green-600); font-size: 20px; }
+.stat-lbl { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.dash-divider { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+
 .manage-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
 .manage-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 .manage-tab { padding: 10px 16px; border: none; background: none; font-size: 13px; font-weight: 500; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; }
@@ -234,8 +295,30 @@ function handleSubmit() {
 .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
 .toggle.active::after { transform: translateX(20px); }
 
+.commission-info-banner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.badge-green-light { background: #dcfce7; color: #166534; font-weight: 700; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
+.fee-calc-box {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+}
+.fee-row { display: flex; justify-content: space-between; align-items: center; margin: 2px 0; }
+.text-danger { color: #dc2626; font-weight: 600; }
+.font-bold { font-weight: 700; }
+
 @media (max-width: 768px) {
   .manage-page { padding: 16px; }
   .add-form-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>

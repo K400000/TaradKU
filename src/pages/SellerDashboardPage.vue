@@ -8,7 +8,9 @@ import logoImg from '../assets/logo_branding.png'
 const router = useRouter()
 const activeListings = computed(() => myProducts.value.length)
 const pendingOrders = computed(() => sellerOrders.value.filter(o => o.status === 'pending').length)
-const totalRevenue = computed(() => sellerOrders.value.reduce((s, o) => s + o.totalAmount, 0))
+const grossRevenue = computed(() => sellerOrders.value.reduce((s, o) => s + o.totalAmount, 0))
+const commissionFee = computed(() => Math.round(grossRevenue.value * 0.035))
+const netRevenue = computed(() => grossRevenue.value - commissionFee.value)
 const recentOrders = computed(() => sellerOrders.value.slice(0, 3))
 
 const STATUS_ICONS = { pending: 'bi-hourglass-split', shipped: 'bi-truck', delivered: 'bi-check-circle-fill' }
@@ -17,8 +19,8 @@ const STATUS_LABELS = { pending: 'รอส่ง', shipped: 'กำลังส
 const statCards = computed(() => [
   { icon: 'bi-box-seam', label: 'Active Listings', val: activeListings.value, cls: '' },
   { icon: 'bi-bag-check', label: 'Total Orders', val: sellerOrders.value.length, cls: '' },
-  { icon: 'bi-hourglass-split', label: 'Pending', val: pendingOrders.value, cls: 'pending' },
-  { icon: 'bi-currency-dollar', label: 'Revenue', val: `฿${totalRevenue.value.toLocaleString('th-TH')}`, cls: 'green' },
+  { icon: 'bi-currency-dollar', label: 'Gross Revenue', val: `฿${grossRevenue.value.toLocaleString('th-TH')}`, cls: '' },
+  { icon: 'bi-wallet2', label: 'Net Earnings (หัก 3.5%)', val: `฿${netRevenue.value.toLocaleString('th-TH')}`, cls: 'green' },
 ])
 </script>
 

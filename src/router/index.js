@@ -3,7 +3,6 @@ import { appState } from '../stores/app.js'
 
 // Pages — Shared
 import LoginPage from '../pages/LoginPage.vue'
-import RegisterPage from '../pages/RegisterPage.vue'
 import HomePage from '../pages/HomePage.vue'
 import CategoriesPage from '../pages/CategoriesPage.vue'
 import MessagePage from '../pages/MessagePage.vue'
@@ -26,7 +25,7 @@ const routes = [
   // Auth
   { path: '/', redirect: '/login' },
   { path: '/login', name: 'Login', component: LoginPage, meta: { public: true } },
-  { path: '/register', name: 'Register', component: RegisterPage, meta: { public: true } },
+  { path: '/register', redirect: '/login' },
 
   // Shared (authenticated)
   { path: '/home', name: 'Home', component: HomePage },
@@ -42,7 +41,7 @@ const routes = [
   { path: '/orders', name: 'OrderTracking', component: OrderTrackingPage },
 
   // Seller Flow
-  { path: '/seller/dashboard', name: 'SellerDashboard', component: SellerDashboardPage },
+  { path: '/seller/dashboard', redirect: '/seller/products' },
   { path: '/seller/products', name: 'SellerProducts', component: SellerProductManagePage },
   { path: '/seller/orders', name: 'SellerOrders', component: SellerOrderManagePage },
   { path: '/seller/promotions', name: 'SellerPromotions', component: SellerPromotionPage },
